@@ -1,0 +1,23 @@
+<header>
+	<logo>
+		<%= link_to logo, root_path %>
+	</logo>
+		<nav>
+			<navigational id="round">
+				<li><%= link_to "Home", root_path %></li>
+				<li><%= link_to "Albums", albums_path %></li>
+				<li><%= link_to "Artists", artists_path %></li>
+				<li><%= link_to "Sources", sources_path %></li>						
+			</navigational></br>
+			<ul>
+				<navigational id="round">
+					<li><%= link_to "Add Album", addalbum_path %></li></br>
+					<li><%= link_to "Add Artist", addartist_path %></li></br>
+					<li><%= link_to "Add Source", addsource_path %></li>
+				</navigational>
+			</ul>
+		</nav>		
+		<TitleText>
+			FireWhale's </br> Music </br> Database
+		</TitleText>
+</header>

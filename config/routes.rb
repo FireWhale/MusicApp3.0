@@ -1,4 +1,20 @@
 MusicApp30::Application.routes.draw do
+  resources :publishers
+  resources :sources
+  resources :artists
+  resources :albums
+
+  root :to => 'pages#home'
+  
+  match '/addalbum', :to => 'albums#new'
+  match '/addartist', :to => 'artists#new'
+  match '/addsource', :to => 'sources#new'
+  match '/editalbum', :to => 'albums#edit'
+  match '/addcomposerform', :to => 'albums#addcomposerform'
+  match '/addarrangerform', :to => 'albums#addarrangerform'
+  match '/addperformerform', :to => 'albums#addperformerform'
+  match '/addsourceform', :to => 'albums#addsourceform'
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

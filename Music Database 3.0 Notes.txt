@@ -1,0 +1,40 @@
+Welcome to another Iteration of my Music Database. 
+This time around I'll be planning from the ground up.
+Without further ado, let's start with the research
+
+-----Overview-----
+1. Create a Database of albums, artists, and sources and allow connectiosn between the 3.
+     a. Albums: name, release date, catalog number, genre, classification, albumobtained, reference, album art, notes
+     b. Artists: Name, reference, Activity, Database Activity, Obtained
+     c. Sources: Name, Reference, Activity, Database Activity, Obtained
+     d. Publishers: Name, Reference
+     e. Join Tables: Album/Artist Composer, Arranger, Performer, Album/Source, Aliases, Units
+2. Create a Website to view the database.
+
+
+
+
+-----Website Research-----
+1. vgmdb.net
+	a. Information
+		Add Artist join tables: Composer, Arranger, Performer 
+		Add Album: Original, Arrangement
+		Ignore Lyricists, Commercial/Doujin (unnecessary for purpose of site)
+		Add in Publishers 
+		Ignore Tracklist and Notes (unnecessary for purpose of site)
+		Add Album Art
+	b. Design
+		Infobits out of the list
+		Just added
+		Upcoming albums
+2. luelinks topic
+	a. Different data structure? (would take too long to learn for no expressive benefit, imo)		
+3. Last.fm
+	a. Very social 
+	b. Integration? Top Artists? Highlighting?
+4. Wikipedia
+	a. Design
+		Can incorporate left-side bar. Information for each artist
+	b. Include a text field for each artist/source for description
+5. myanimelist.net
+	a. Rating? Statistics? Reviews? Tags

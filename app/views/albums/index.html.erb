@@ -1,0 +1,52 @@
+<header>
+	<nav>
+<% if params[:sort] != "releasedate" %>
+	<%= link_to "Sort by Release date", albums_path(:sort => "releasedate") %></br>
+<% end %>
+<% if params[:sort] != "name" %>
+	<%= link_to "Sort by Name", albums_path(:sort => "name") %></br>
+<% end %>
+<% if params[:sort] != "created_at" %>
+	<%= link_to "Sort by Added date", albums_path(:sort => "created_at") %></br>
+<% end %>
+<% if params[:sort] != "publisher" %>
+	<%= link_to "Sort by Publisher", albums_path(:sort => "publisher") %></br>
+<% end %>
+  	</nav>
+</header>
+
+<h1>All Albums (By <%= @title %>) (<%= @albums.count %>)</h1>
+<% provide(:title, 'All Albums') %>
+
+<table id="AlbumTable">
+  <tr>
+    <th>Obtained</th>
+    <th>Name</th>
+    <th>Releasedate</th>
+    <th>Catalog Number</th>
+    <th>Reference</th>
+    <th>Source</th>
+  </tr>
+
+<% @sorted.each do |album| %>
+  <tr>
+	<% if album.obtained == true%>
+		<td><%= image_tag("tick.png") %></td>
+	<% else %>
+		<td><%= image_tag("cross.png")%></td>
+	<% end %>
+    <td><%= link_to album.name, album %></td>
+    <td><%= album.releasedate %></td>
+    <td><%= album.catalognumber %></td>
+    <td><%= album.reference %></td>
+    <td><% @sources = album.sources %>
+		<% @sources.each do |each| %>
+				<%= link_to each.name, source_path(each) %></br>
+		<% end %>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Album', new_album_path %>

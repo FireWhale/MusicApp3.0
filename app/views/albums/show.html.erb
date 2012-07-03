@@ -1,0 +1,82 @@
+<header>
+  <nav>
+  	<b>Album obtained:</b>
+  	<%= @album.obtained %>
+  </nav>
+</header>
+
+
+
+<p id="notice"><%= notice %></p>
+<% provide(:title, @album.name) %>
+
+<p>
+  <b>Name:</b>
+  <%= @album.name %>
+</p>
+
+<p>
+  <b>Albumart:</b>
+  <%= @album.albumart %>
+</p>
+
+<p>
+  <b>Catalog Number:</b>
+  <%= @album.catalognumber %>
+</p>
+
+<%= link_to 'Edit', edit_album_path(@album) %>
+
+<p>
+  <b>Release date:</b>
+  <%= @album.releasedate %>
+</p>
+
+<p>
+  <b>Genre:</b>
+  <%= @album.genre %>
+</p>
+
+<p>
+  <b>Reference:</b>
+  <%= link_to @album.reference, @album.reference %>
+</p>
+
+<p>
+  <b>Publisher:</b>
+  <% if @publisher.nil? == false %>
+  <%= link_to @publisher.name, publisher_path(@publisher) %>
+  <% end %>
+</p>
+
+<p>
+	<b>Composer(s):</b></br>
+		<% @composers.each do |each| %>
+				<%= link_to each.name, artist_path(each) %></br>
+		<% end %>
+</p>
+<p>
+	<b>Arranger(s):</b></br>
+		<% @arrangers.each do |each| %>
+				<%= link_to each.name, artist_path(each) %></br>
+		<% end %>
+</p>
+<p>
+	<b>Performer(s):</b></br>
+		<% @performers.each do |each| %>
+				<%= link_to each.name, artist_path(each) %></br>
+		<% end %>
+</p>
+<p>
+	<b>Source(s):</b></br>
+		<% @sources.each do |each| %>
+				<%= link_to each.name, source_path(each) %></br>
+		<% end %>
+</p><hr>
+
+<p>
+  <b>Notes:</b>
+  <%= @album.note %>
+</p>
+
+<%= link_to "Delete Album?", @album, :method => :delete, :confirm => "You sure?"%>

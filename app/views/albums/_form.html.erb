@@ -1,0 +1,144 @@
+<% if @albumformdisplay.nil?
+	@albumformdisplay = "true"
+   end
+%>
+<%= form_for(@album, :html => {:style => "display: " + @albumformdisplay}, :remote => true, :id=>"AddAlbumForm") do |f| %>
+  <% if @album.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@album.errors.count, "error") %> prohibited this album from being saved:</h2>
+
+      <ul>
+      <% @album.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :releasedate %><br />
+    <%= f.date_select :releasedate %>
+  </div>
+  <div class="field">
+    <%= f.label :catalognumber, "Catalog nNumber" %><br />
+    <%= f.text_field :catalognumber %>
+  </div>
+  <div class="field">
+    <%= f.label :genre %><br />
+    <%= f.text_field :genre %>
+  </div>
+  <div class="field">
+    <%= f.label :classification %><br />
+    <%= f.text_field :classification %>
+  </div>
+  <div class="field">
+    <%= f.label :reference %><br />
+    <%= f.text_field :reference %>
+  </div>
+  <div class="field">
+    <%= f.label :albumart %><br />
+    <%= f.text_field :albumart %>
+  </div>
+  <div class="field">
+    <%= f.label :note %><br />
+    <%= f.text_field :note %>
+  </div>
+  
+  <% if @title == "new" or @album.publisher.nil? == true %>
+    <%= fields_for 'Publisher' do |f| %>
+	  <div class="field">
+	    <%= f.label "Publisher" %><br />
+	    <%= f.text_field 'Name' %>
+	  </div>
+    <% end %>
+  <% end %>
+  
+  <% if @title == "edit" and @album.publisher.nil? == false %>  
+    Publisher (uncheck to remove):
+	  <div class="field">
+	    <%= @publisher.name %>
+	    <%= hidden_field_tag @publisher.name, 0 %>
+	    <%= check_box_tag @publisher.name, 1, true %>
+	  </div>
+  <% end %>  
+    
+  <% if @title == "edit" and @album.composers.empty? == false %>  
+    Composer(s) (uncheck to remove):
+  	<% @composers.each do |each| %>
+	  <div class="field">
+	    <%= each.name %>
+	    <%= hidden_field_tag each.name, 0 %>
+	    <%= check_box_tag each.name, 1, true %>
+	  </div>
+    <% end %>
+  <% end %>  
+  
+  <%= render :partial => 'albums/add_composer_form' %>
+   <div id="AddComposerField"></div>
+  <%= link_to "Add another Composer Field", addcomposerform_path, :remote => true %></br></br>
+  
+  <% if @title == "edit" and @album.arrangers.empty? == false %>  
+    Arranger(s) (uncheck to remove):
+  	<% @arrangers.each do |each| %>
+	  <div class="field">
+	    <%= each.name %>
+	    <%= hidden_field_tag each.name, 0 %>
+	    <%= check_box_tag each.name, 1, true %>
+	  </div>
+    <% end %>
+  <% end %>
+
+  <%= render :partial => 'albums/add_arranger_form' %>
+   <div id="AddArrangerField"></div>
+  <%= link_to "Add another Arranger Field", addarrangerform_path, :remote => true %></br></br>
+  
+  <% if @title == "edit" and @album.performers.empty? == false  %>  
+    Performer(s) (uncheck to remove):
+  	<% @performers.each do |each| %>
+	  <div class="field">
+	    <%= each.name %>
+	    <%= hidden_field_tag each.name, 0 %>
+	    <%= check_box_tag each.name, 1, true %>
+	  </div>
+    <% end %>
+  <% end %>  
+  
+  <%= render :partial => 'albums/add_performer_form' %>
+   <div id="AddPerformerField"></div>
+  <%= link_to "Add another Performer Field", addperformerform_path, :remote => true %></br></br>
+  
+  <% if @title == "edit" and @album.sources.empty? == false %>  
+    Source(s) (uncheck to remove):
+  	<% @sources.each do |each| %>
+	  <div class="field">
+	    <%= each.name %>
+	    <%= hidden_field_tag each.name, 0 %>
+	    <%= check_box_tag each.name, 1, true %>
+	  </div>
+    <% end %>
+  <% end %>
+  
+  <%= render :partial => 'albums/add_source_form' %>
+   <div id="AddSourceField"></div>
+  <%= link_to "Add another Source Field", addsourceform_path, :remote => true %></br></br>
+  
+  <%= fields_for(:album) do |f| %>   
+    <div class="field">
+      <%= f.label :obtained, "Album Obtained" %><br />
+      <%= f.check_box :obtained %>
+    </div>
+  <% end %>
+  
+  <% if @title == "new" %>
+    <% provide(:title, "New Album") %>
+    <%= hidden_field_tag(:title, "new")%>
+  <% end %>
+    
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

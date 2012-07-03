@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  releasedate: 2012-07-02
+  catalognumber: MyString
+  genre: MyString
+  classification: MyString
+  obtained: false
+  reference: MyString
+  albumart: MyString
+  note: MyString
+
+two:
+  name: MyString
+  releasedate: 2012-07-02
+  catalognumber: MyString
+  genre: MyString
+  classification: MyString
+  obtained: false
+  reference: MyString
+  albumart: MyString
+  note: MyString

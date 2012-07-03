@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @source.name %>
+</p>
+
+<p>
+  <b>Reference:</b>
+  <%= @source.reference %>
+</p>
+
+<p>
+  <b>Activity:</b>
+  <%= @source.activity %>
+</p>
+
+<p>
+  <b>Database activity:</b>
+  <%= @source.database_activity %>
+</p>
+
+<p>
+  <b>Obtained:</b>
+  <%= @source.obtained %>
+</p>
+
+
+<%= link_to 'Edit', edit_source_path(@source) %> |
+<%= link_to 'Back', sources_path %>
