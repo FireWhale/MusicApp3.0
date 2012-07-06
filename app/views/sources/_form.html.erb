@@ -21,15 +21,11 @@
   </div>
   <div class="field">
     <%= f.label :activity %><br />
-    <%= f.text_field :activity %>
+    <%= f.select :activity, [['Ongoing', 'Ongoing'], ['Completed', 'Completed']], :include_blank => true %>
   </div>
   <div class="field">
     <%= f.label :database_activity %><br />
-    <%= f.text_field :database_activity %>
-  </div>
-  <div class="field">
-    <%= f.label :obtained %><br />
-    <%= f.check_box :obtained %>
+    <%= f.select :database_activity, [['Up to Date', 'Up to Date'], ['Not Up to Date', 'Not Up to Date'], ['Ignored', 'Ignored']], :include_blank => true %>
   </div>
   <div class="actions">
     <%= f.submit %>

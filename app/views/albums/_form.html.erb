@@ -21,10 +21,10 @@
   </div>
   <div class="field">
     <%= f.label :releasedate %><br />
-    <%= f.date_select :releasedate %>
+    <%= f.date_select :releasedate, :default => @datenum %>
   </div>
   <div class="field">
-    <%= f.label :catalognumber, "Catalog nNumber" %><br />
+    <%= f.label :catalognumber, "Catalog Number" %><br />
     <%= f.text_field :catalognumber %>
   </div>
   <div class="field">
@@ -43,28 +43,22 @@
     <%= f.label :albumart %><br />
     <%= f.text_field :albumart %>
   </div>
-  <div class="field">
-    <%= f.label :note %><br />
-    <%= f.text_field :note %>
-  </div>
-  
-  <% if @title == "new" or @album.publisher.nil? == true %>
-    <%= fields_for 'Publisher' do |f| %>
-	  <div class="field">
-	    <%= f.label "Publisher" %><br />
-	    <%= f.text_field 'Name' %>
-	  </div>
-    <% end %>
-  <% end %>
   
   <% if @title == "edit" and @album.publisher.nil? == false %>  
     Publisher (uncheck to remove):
 	  <div class="field">
-	    <%= @publisher.name %>
-	    <%= hidden_field_tag @publisher.name, 0 %>
-	    <%= check_box_tag @publisher.name, 1, true %>
+	    <%= @pub.name %>
+	    <%= hidden_field_tag @pub.name, 0 %>
+	    <%= check_box_tag @pub.name, 1, true %>
 	  </div>
   <% end %>  
+   
+    <%= fields_for 'Publisher' do |f| %>
+	  <div class="field">
+	    <%= f.label "Publisher" %><br />
+	    <%= f.text_field 'Name', :value => @publisher %>
+	  </div>
+    <% end %>
     
   <% if @title == "edit" and @album.composers.empty? == false %>  
     Composer(s) (uncheck to remove):
@@ -76,6 +70,20 @@
 	  </div>
     <% end %>
   <% end %>  
+  
+  <% if @title == "screenscrape"%>
+  	<h1>Linked Composers</h1>
+  	<% @linkedcomposers.each do |composer|%>
+  		<% @holder = composer %>
+  		<%= render :partial => 'albums/add_composer_form' %>
+  	<% end %>
+  	<h1>Unlinked Composers </h1>
+  	<% @scrapedcomposers.each do |composer|%>
+  		<% @holder = composer %>
+  		<%= render :partial => 'albums/add_composer_form' %>
+  	<% end %>
+  <% end %>
+  <% @holder = "" %>
   
   <%= render :partial => 'albums/add_composer_form' %>
    <div id="AddComposerField"></div>
@@ -92,6 +100,20 @@
     <% end %>
   <% end %>
 
+  <% if @title == "screenscrape"%>
+  	<h1>Linked Arrangers</h1>
+  	<% @linkedarrangers.each do |arranger|%>
+  		<% @holder = arranger %>
+  		<%= render :partial => 'albums/add_arranger_form' %>
+  	<% end %>
+  	<h1>Unlinked Arrangers </h1>
+  	<% @scrapedarrangers.each do |arranger|%>
+  		<% @holder = arranger %>
+  		<%= render :partial => 'albums/add_arranger_form' %>
+  	<% end %>
+  <% end %>
+  <% @holder = "" %>
+  
   <%= render :partial => 'albums/add_arranger_form' %>
    <div id="AddArrangerField"></div>
   <%= link_to "Add another Arranger Field", addarrangerform_path, :remote => true %></br></br>
@@ -106,6 +128,20 @@
 	  </div>
     <% end %>
   <% end %>  
+
+  <% if @title == "screenscrape"%>
+  	<h1>Linked Performers</h1>
+  	<% @linkedperformers.each do |performer| %>
+  		<% @holder = performer %>
+  		<%= render :partial => 'albums/add_performer_form' %>
+  	<% end %>
+  	<h1>Unlinked Performers </h1>
+  	<% @scrapedperformers.each do |performer|%>
+  		<% @holder = performer %>
+  		<%= render :partial => 'albums/add_performer_form' %>
+  	<% end %>
+  <% end %>
+  <% @holder = "" %>  
   
   <%= render :partial => 'albums/add_performer_form' %>
    <div id="AddPerformerField"></div>
@@ -122,6 +158,15 @@
     <% end %>
   <% end %>
   
+  <% if @title == "screenscrape"%>
+  	<h1>Sources </h1>
+  	<% @scrapedsources.each do |source|%>
+  		<% @holder = source %>
+  		<%= render :partial => 'albums/add_source_form' %>
+  	<% end %>
+  <% end %>
+  <% @holder = "" %>  
+  
   <%= render :partial => 'albums/add_source_form' %>
    <div id="AddSourceField"></div>
   <%= link_to "Add another Source Field", addsourceform_path, :remote => true %></br></br>
@@ -130,12 +175,19 @@
     <div class="field">
       <%= f.label :obtained, "Album Obtained" %><br />
       <%= f.check_box :obtained %>
+  <div class="field">
+    <%= f.label :note %><br />
+    <%= f.text_area :note %>
+  </div>
     </div>
   <% end %>
   
   <% if @title == "new" %>
-    <% provide(:title, "New Album") %>
     <%= hidden_field_tag(:title, "new")%>
+  <% end %>
+  
+  <% if @title == "screenscrape" %>
+    <%= hidden_field_tag(:title, "screenscrape")%>
   <% end %>
     
   <div class="actions">

@@ -1,6 +1,4 @@
-<h1>Editing artist</h1>
+<h1>Editing  <%= link_to @artist.name, @artist %> </h1>
+    <% provide(:title, "Edit Artist") %>
 
 <%= render 'form' %>
-
-<%= link_to 'Show', @artist %> |
-<%= link_to 'Back', artists_path %>

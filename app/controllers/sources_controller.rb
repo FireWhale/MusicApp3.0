@@ -3,6 +3,7 @@ class SourcesController < ApplicationController
   # GET /sources.json
   def index
     @sources = Source.all
+    @sourcessorted = @sources.sort! { |a,b| a.name.downcase <=> b.name.downcase }
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,10 +15,23 @@ class SourcesController < ApplicationController
   # GET /sources/1.json
   def show
     @source = Source.find(params[:id])
+    @albums = @source.albums
+    #Code for Obtained Functionality
+    @source.obtained = true
+    @albums.each do |each|
+      if each.albumobtained == false
+        @source.obtained = false
+      end
+    end
+    @source.save
+    
+    #For adding an Album under an Artist
+    @album = Album.new
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @source }
+      format.js {}
     end
   end
 

@@ -1,6 +1,6 @@
-	<%= fields_for 'Performer Names' do |f| %>
+	<%= fields_for 'performers' do |f| %>
 		<div class="field">
 			<%= f.label "Performer" %><br />
-			<%= f.text_field '' %>
+			<%= f.text_field '', :value => @holder %>
 		</div>
 	<% end %>

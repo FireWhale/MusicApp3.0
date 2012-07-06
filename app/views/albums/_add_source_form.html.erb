@@ -1,6 +1,6 @@
-	<%= fields_for 'Source Names' do |f| %>
+	<%= fields_for 'sources' do |f| %>
 		<div class="field">
 			<%= f.label "Source" %><br />
-			<%= f.text_field '' %>
+			<%= f.text_field '', :value => @holder %>
 		</div>
 	<% end %>

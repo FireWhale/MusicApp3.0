@@ -3,29 +3,18 @@
 <table>
   <tr>
     <th>Name</th>
-    <th>Reference</th>
+    <th>Database</th>
     <th>Activity</th>
-    <th>Database activity</th>
-    <th>Obtained</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
-<% @sources.each do |source| %>
+<% @sourcessorted.each do |source| %>
   <tr>
-    <td><%= source.name %></td>
-    <td><%= source.reference %></td>
-    <td><%= source.activity %></td>
+    <td><%= link_to source.name, source %></td>
     <td><%= source.database_activity %></td>
-    <td><%= source.obtained %></td>
-    <td><%= link_to 'Show', source %></td>
-    <td><%= link_to 'Edit', edit_source_path(source) %></td>
-    <td><%= link_to 'Destroy', source, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= source.activity %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Source', new_source_path %>

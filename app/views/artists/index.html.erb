@@ -1,4 +1,5 @@
 <h1>Listing artists</h1>
+<% provide(:title, 'All Artists') %>
 
 <table>
   <tr>
@@ -7,25 +8,18 @@
     <th>Activity</th>
     <th>Database activity</th>
     <th>Obtained</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
-<% @artists.each do |artist| %>
+<% @artistssorted.each do |artist| %>
   <tr>
-    <td><%= artist.name %></td>
+    <td><%= link_to artist.name, artist %></td>
     <td><%= artist.reference %></td>
     <td><%= artist.activity %></td>
     <td><%= artist.database_activity %></td>
     <td><%= artist.obtained %></td>
-    <td><%= link_to 'Show', artist %></td>
-    <td><%= link_to 'Edit', edit_artist_path(artist) %></td>
-    <td><%= link_to 'Destroy', artist, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Artist', new_artist_path %>

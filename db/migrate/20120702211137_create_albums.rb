@@ -9,7 +9,7 @@ class CreateAlbums < ActiveRecord::Migration
       t.boolean :obtained
       t.string :reference
       t.string :albumart
-      t.string :note
+      t.text :note
       t.integer :publisher_id
 
       t.timestamps

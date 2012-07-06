@@ -1,0 +1,10 @@
+<h1>Scrape a Album!</h1>
+<%= form_for 'Website', :url => {:controller => 'albums', :action => 'scrape' }  do |f| %>
+  <div class="field">
+    <%= f.label 'Website Link' %><br />
+    <%= f.text_field 'link' %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Scrape!' %>
+  </div>
+<% end %>

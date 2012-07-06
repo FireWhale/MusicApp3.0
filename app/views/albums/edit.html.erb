@@ -1,4 +1,5 @@
 <h1>Editing album: <%= link_to @album.name, @album %></h1>
+    <% provide(:title, "Edit Album") %>
 
 <%= render 'form' %>
 

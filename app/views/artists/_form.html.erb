@@ -21,16 +21,34 @@
   </div>
   <div class="field">
     <%= f.label :activity %><br />
-    <%= f.text_field :activity %>
+    <%= f.select :activity, [['Active', 'Active'], ['Retired', 'Retired']], :include_blank => true %>
   </div>
   <div class="field">
-    <%= f.label :database_activity %><br />
-    <%= f.text_field :database_activity %>
+    <%= f.label 'Database Records' %><br />
+    <%= f.select :database_activity, [['Up to Date', 'Up to Date'], ['Not Up to Date', 'Not Up to Date'], ['Ignored', 'Ignored']], :include_blank => true %>
   </div>
-  <div class="field">
-    <%= f.label :obtained %><br />
-    <%= f.check_box :obtained %>
-  </div>
+  <% if @title == "edit" %>
+	<% if @aliases.empty? == false %>
+		Alias(es) (uncheck to remove):
+		<% @aliases.each do |each| %>
+			<% @artistalias = Artist.find_by_id(each.alias_id) %>
+			<p>	<%= @artistalias.name %>
+			<%= hidden_field_tag @artistalias.name, 0 %>
+			<%= check_box_tag @artistalias.name, 1, true  %>
+		<% end %>
+	<% end %>  
+	<%= render 'add_alias_form' %>
+	<% if @members.empty? == false %>
+		Member(s) of this Unit (uncheck to remove):
+		<% @members.each do |each| %>
+			<% @artistmember = Artist.find_by_id(each.member_id) %>
+			<p>	<%= @artistmember.name %>
+			<%= hidden_field_tag @artistmember.name, 0 %>
+			<%= check_box_tag @artistmember.name, 1, true  %>
+		<% end %>
+	<% end %>  
+	<%= render 'add_member_form' %>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(:version => 20120702220106) do
     t.boolean  "obtained"
     t.string   "reference"
     t.string   "albumart"
-    t.string   "note"
+    t.text     "note"
     t.integer  "publisher_id"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(:version => 20120702220106) do
     t.string   "activity"
     t.string   "database_activity"
     t.boolean  "obtained"
-    t.string   "note"
+    t.text     "note"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(:version => 20120702220106) do
     t.string   "activity"
     t.string   "database_activity"
     t.boolean  "obtained"
-    t.string   "note"
+    t.text     "note"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end

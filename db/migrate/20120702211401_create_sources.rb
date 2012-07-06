@@ -6,7 +6,7 @@ class CreateSources < ActiveRecord::Migration
       t.string :activity
       t.string :database_activity
       t.boolean :obtained
-      t.string :note
+      t.text :note
 
       t.timestamps
     end

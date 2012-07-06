@@ -63,7 +63,7 @@ class AlbumsController < ApplicationController
     @arrangers = @album.arrangers
     @performers = @album.performers
     @sources = @album.sources
-    @publisher = @album.publisher
+    @pub = @album.publisher
     @title = "edit"
   end
 
@@ -71,42 +71,36 @@ class AlbumsController < ApplicationController
   # POST /albums.json
   def create
     @album = Album.new(params[:album])
-    
-    #Creating Relationships
-    params["Composer Names"].each do |each|
-      if each.empty? == false
-        @exists = Artist.find_by_name(each)
-        if @exists.nil? == true
-          @album.composers.build(:name => each)
-        else
-          @album.composers << Artist.find_by_name(each)
+    @artists = params["composers"] | params["arrangers"] | params["performers"]
+    @artists.each do |artist|
+      if artist.empty? == false
+        @exists = Artist.find_by_name(artist)
+        if @exists.nil?
+          @artist = Artist.new(:name => artist)
+          @artist.save
         end
       end
     end
-    params["Arranger Names"].each do |each|
+    #Creating Relationships
+    params["composers"].each do |each|
       if each.empty? == false
-        @exists = Artist.find_by_name(each)
-        if @exists.nil? == true
-          @album.arrangers.build(:name => each)
-        else
-          @album.arrangers << Artist.find_by_name(each)
-        end
+        @album.composers << Artist.find_by_name(each)
+      end
+    end
+    params["arrangers"].each do |each|
+      if each.empty? == false
+        @album.arrangers << Artist.find_by_name(each)
       end
     end    
-    params["Performer Names"].each do |each|
+    params["performers"].each do |each|
       if each.empty? == false
-        @exists = Artist.find_by_name(each)
-        if @exists.nil? == true
-          @album.performers.build(:name => each)
-        else
-          @album.performers << Artist.find_by_name(each)
-        end
+        @album.performers << Artist.find_by_name(each)
       end
     end
-    params["Source Names"].each do |each|
+    params["sources"].each do |each|
       if each.empty? == false
         @exists = Source.find_by_name(each)
-        if @exists.nil? == true
+        if @exists.nil?
           @album.sources.build(:name => each)
         else
           @album.sources << Source.find_by_name(each)
@@ -116,7 +110,7 @@ class AlbumsController < ApplicationController
     @publisher = params["Publisher"]["Name"]
       if @publisher.empty? == false
         @exists = Publisher.find_by_name(@publisher)
-        if @exists.nil? == true
+        if @exists.nil?
           @album.create_publisher!(:name => @publisher)
         else
           @album.publisher_id = @exists.id
@@ -127,7 +121,7 @@ class AlbumsController < ApplicationController
       if @album.save
         format.html { redirect_to @album, :notice => 'Album was successfully created.' }
         format.json { render :json => @album, :status => :created, :location => @album }
-        if params[:title] == "new"
+        if params[:title] == "new" or params[:title] == "screenscrape"
           format.js { js_redirect_to(album_path(@album))}
         else
           format.js {}           
@@ -145,38 +139,33 @@ class AlbumsController < ApplicationController
   def update
     @album = Album.find(params[:id])
     
-   #Creating Relationships
-    params["Composer Names"].each do |each|
-      if each.empty? == false
-        @exists = Artist.find_by_name(each)
-        if @exists.nil? == true
-          @album.composers.build(:name => each)
-        else
-          @album.composers << Artist.find_by_name(each)
-        end
-      end
-    end
-    params["Arranger Names"].each do |each|
-      if each.empty? == false
-        @exists = Artist.find_by_name(each)
-        if @exists.nil? == true
-          @album.arrangers.build(:name => each)
-        else
-          @album.arrangers << Artist.find_by_name(each)
+    #Creating Relationships
+    @artists = params["composers"] | params["arrangers"] | params["performers"]
+    @artists.each do |artist|
+      if artist.empty? == false
+        @exists = Artist.find_by_name(artist)
+        if @exists.nil?
+          @artist = Artist.new(:name => artist)
+          @artist.save
         end
       end
     end    
-    params["Performer Names"].each do |each|
+    params["composers"].each do |each|
       if each.empty? == false
-        @exists = Artist.find_by_name(each)
-        if @exists.nil? == true
-          @album.performers.build(:name => each)
-        else
-          @album.performers << Artist.find_by_name(each)
-        end
+        @album.composers << Artist.find_by_name(each)
       end
     end
-    params["Source Names"].each do |each|
+    params["arrangers"].each do |each|
+      if each.empty? == false
+        @album.arrangers << Artist.find_by_name(each)
+      end
+    end    
+    params["performers"].each do |each|
+      if each.empty? == false
+        @album.performers << Artist.find_by_name(each)
+      end
+    end
+    params["sources"].each do |each|
       if each.empty? == false
         @exists = Source.find_by_name(each)
         if @exists.nil? == true
@@ -185,7 +174,7 @@ class AlbumsController < ApplicationController
           @album.sources << Source.find_by_name(each)
         end
       end
-    end    
+    end
     @publisher = params["Publisher"]["Name"]
       if @publisher.empty? == false
         @exists = Publisher.find_by_name(@publisher)
@@ -194,7 +183,7 @@ class AlbumsController < ApplicationController
         else
           @album.publisher_id = @exists.id
         end
-      end  
+      end
     
     #Deleting Relationships  
     @exists = @album.composers.dup
@@ -224,7 +213,14 @@ class AlbumsController < ApplicationController
       if params[@existence] == "0" #checking the value of params[each.name] (which was set to 0 when unchecked.)
         @album.sources.delete(Source.find_by_name(each.name))
       end
-    end  
+    end
+    if @album.publisher.nil? == false
+      @exists = @album.publisher.dup
+      @existence = @exists.name #setting an instance variable as 'each' name
+      if params[@existence] == "0" #checking the value of params[each.name] (which was set to 0 when unchecked.)
+        @album.publisher_id = ""
+      end
+    end
 
     respond_to do |format|
       if @album.update_attributes(params[:album])
@@ -250,4 +246,87 @@ class AlbumsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def websitelink
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render :json => @albums }
+    end
+  end
+  def scrape
+    @url = params['Website']['link']
+    
+    respond_to do |format|
+      format.html { redirect_to scrapeanalbum_url :website => @url }
+      format.json { head :no_content }
+    end
+  end
+  def scrapeanalbum
+    require 'open-uri'
+    @title = "screenscrape"
+    
+    url = params[:website]
+    doc = Nokogiri::HTML(open(url))
+    #Name
+    @name = doc.xpath("//span[@class='albumtitle']").first.text
+    #Catalog Number
+    @catalognumber = doc.xpath("//table[@id='album_infobit_large']//tr[1]//td[2]").text.split(' ')[0]
+    #Date
+    @date = doc.xpath("//table[@id='album_infobit_large']//tr[2]//td[2]").text
+    @datenum = Date.parse @date
+    @dateyear = @datenum.year
+    @datemonth = @datenum.month
+    @dateday = @datenum.day
+    #Genre
+    @genre = doc.xpath("//td[@id='rightcolumn']/div[2]//div[@class='smallfont']//div[4]/text()").text.strip
+    if @genre == "Animation"
+      @genre = "Anime"
+    end
+    #Classification    Original or Arrangement
+    @classification = doc.xpath("//table[@id='album_infobit_large']//tr[6]//td[2]").text.split(", ")[0]
+    #Reference
+    @reference = url
+    #Album Art
+    @scrapedalbumartlink = doc.xpath("//img[@id= 'coverart']//@src").text
+    @albumartlink = "http://vgmdb.net" + @scrapedalbumartlink
+    open('app/assets/images/albumart/' + @name + ".jpg", 'wb') do |file|
+      file << open(@albumartlink).read
+    end
+    @albumart = 'app/assets/images/albumart/' + @name + ".jpg"
+    #Publisher
+    @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]//span[1]").text
+    #Composers  
+    @scrapedcomposerlist = doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]/text()").text.split(", ")
+    @scrapedcomposers = @scrapedcomposerlist.reject { |arr| arr.all?(&:blank?)}
+    @linkedcomposers = []
+    doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]//span[1]").each {|node|
+      @linkedcomposers.push(node.text)
+      }
+    @scrapedarrangerlist = doc.xpath("//table[@id='album_infobit_large']//tr[9]//td[2]/text()").text.split(", ")
+    @linkedarrangers = []
+    @scrapedarrangers = @scrapedarrangerlist.reject { |arr| arr.all?(&:blank?)}
+    doc.xpath("//table[@id='album_infobit_large']//tr[9]//td[2]//span[1]").each {|node|
+      @linkedarrangers.push(node.text)
+      }
+    @linkedperformers = []
+    @scrapedperformerlist = doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]/text()").text.split(", ")
+    @scrapedperformers = @scrapedperformerlist.reject { |arr| arr.all?(&:blank?)}
+    doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]//span[1]").each {|node|
+      @linkedperformers.push(node.text)
+      }
+
+    #Sources
+    @scrapedsources = doc.xpath("//td[@id='rightcolumn']/div[2]//div[@class='smallfont']//div[5]/text()").text.split(", ")
+    doc.xpath("//td[@id='rightcolumn']/div[2]//span[@class='productname'][1]").each {|node|
+      @scrapedsources.push(node.text)
+      }
+    @album = Album.new :name => @name, :releasedate => @datenum, :catalognumber => @catalognumber, :genre => @genre, :classification => @classification, :reference => @reference, :albumart => @albumart
+    
+    respond_to do |format|
+      format.html # scrape!
+      format.json { render :json => @album }
+      format.js {}
+    end
+  end
+  
 end

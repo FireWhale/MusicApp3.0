@@ -1,30 +1,50 @@
 <p id="notice"><%= notice %></p>
+<% provide(:title, @source.name) %>
+
+<header>
+<nav>
+  <b>Activity:</b>
+  <%= @source.activity %>
+</br>
+  <b>Obtained:</b>
+  <% if @source.obtained == true %>
+    <%= image_tag("tick.png") %>
+  <% else %>
+  	<%= image_tag("cross.png")%>
+  <% end %>
+</nav>
+</header>
 
 <p>
   <b>Name:</b>
   <%= @source.name %>
 </p>
 
+<%= link_to 'Edit', edit_source_path(@source) %><hr />
+
 <p>
   <b>Reference:</b>
   <%= @source.reference %>
-</p>
+</p><hr>
 
-<p>
-  <b>Activity:</b>
-  <%= @source.activity %>
-</p>
+<b>Album(s):</b></br>
+<table id="AlbumTable">
+	<% @albums.each do |each| %>
+	<tr>
+		<td><%= link_to each.name, album_path(each) %></td>
+		<% if each.albumobtained == true%>
+			<td><%= image_tag("tick.png") %></td>
+		<% else %>
+			<td><%= image_tag("cross.png")%></td>
+		<% end %>
+	</tr>
+	<% end %>
+</table><hr>
+		
+<%= link_to_function 'Add an Album?', '$("#new_album").toggle();' %><br/>
+<% @albumformdisplay = "none" %>
+<%= render :partial => 'albums/form'%>
 
-<p>
-  <b>Database activity:</b>
-  <%= @source.database_activity %>
-</p>
+<hr>
 
-<p>
-  <b>Obtained:</b>
-  <%= @source.obtained %>
-</p>
-
-
-<%= link_to 'Edit', edit_source_path(@source) %> |
-<%= link_to 'Back', sources_path %>
+<%= link_to "Delete Source?", @source, :method => :delete, :confirm => "You sure?" %>

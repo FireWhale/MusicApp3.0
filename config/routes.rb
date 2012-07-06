@@ -2,7 +2,12 @@ MusicApp30::Application.routes.draw do
   resources :publishers
   resources :sources
   resources :artists
-  resources :albums
+  resources :albums  do
+    collection do
+      get 'websitelink'
+      post 'scrape'
+    end
+  end   
 
   root :to => 'pages#home'
   
@@ -14,6 +19,8 @@ MusicApp30::Application.routes.draw do
   match '/addarrangerform', :to => 'albums#addarrangerform'
   match '/addperformerform', :to => 'albums#addperformerform'
   match '/addsourceform', :to => 'albums#addsourceform'
+  match '/scrapeanalbum', :to => 'albums#scrapeanalbum'
+  match '/websitelink', :to => 'albums#websitelink'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

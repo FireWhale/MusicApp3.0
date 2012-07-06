@@ -1,0 +1,9 @@
+<tr>
+    <td><%= link_to @album.name, @album %></td>
+    <td><%= @album.releasedate %></td>
+	<% if @album.obtained == true%>
+		<td><%= image_tag("tick.png") %></td>
+	<% else %>
+		<td><%= image_tag("cross.png")%></td>
+	<% end %>
+</tr>

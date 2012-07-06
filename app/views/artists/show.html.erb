@@ -1,30 +1,89 @@
 <p id="notice"><%= notice %></p>
+<% provide(:title, @artist.name) %>
+
+<header>
+<nav>
+  <b>Activity:</b>
+  <%= @artist.activity %>
+</br>
+  <b>Obtained:</b>
+  <% if @artist.obtained == true %>
+    <%= image_tag("tick.png") %>
+  <% else %>
+  	<%= image_tag("cross.png")%>
+  <% end %>
+</nav>
+</header>
 
 <p>
   <b>Name:</b>
   <%= @artist.name %>
 </p>
 
-<p>
-  <b>Reference:</b>
-  <%= @artist.reference %>
-</p>
+<%= link_to 'Edit', edit_artist_path(@artist) %><hr>
 
-<p>
-  <b>Activity:</b>
-  <%= @artist.activity %>
-</p>
-
-<p>
-  <b>Database activity:</b>
-  <%= @artist.database_activity %>
-</p>
-
-<p>
-  <b>Obtained:</b>
-  <%= @artist.obtained %>
-</p>
+<% if @parentalias.nil? == false %>
+	<p>
+ 	  Alias of <%= link_to @parent.name, artist_path(@parent.id) %> 
+	</p><hr>
+<% end %>
 
 
-<%= link_to 'Edit', edit_artist_path(@artist) %> |
-<%= link_to 'Back', artists_path %>
+<% if @aliases.empty? == false %>
+	<b>Alias(es):</b>
+	<table>
+	<% @aliases.each do |each| %>
+		<tr>
+			<% @artistalias = Artist.find_by_id(each.alias_id) %>
+			<td><%= link_to @artistalias.name, artist_path(@artistalias.id) %></td>
+		</tr>
+	<% end %>
+	</table><hr>
+<% end %>
+
+<% if @unitmember.nil? == false %>
+	<p>
+		Member of <%= link_to @unit.name, artist_path(@unit.id)%>
+	</p><hr>
+<% end %>
+
+<% if @members.empty? == false %>
+	<b>Member(s):</b>
+	<table>
+	<% @members.each do |each| %>
+		<tr>
+			<% @artistmember = Artist.find_by_id(each.member_id) %>
+			<td><%= link_to @artistmember.name, artist_path(@artistmember.id) %></td>
+		</tr>
+	<% end %>
+	</table>
+	<hr>
+<% end %>
+<% if @artist.reference.nil? == false %>
+	<p>
+		<b>Reference:</b>
+		<%= link_to @artist.reference, @artist.reference %>
+	</p><hr>
+<% end %>
+
+<b>Albums:</b></br>
+<table id="AlbumTable">
+	<% @albums.each do |each| %>
+	<tr>
+		<td><%= link_to each.name, album_path(each) %></td>
+		<% if each.obtained == true%>
+			<td><%= image_tag("tick.png") %></td>
+		<% else %>
+			<td><%= image_tag("cross.png")%></td>
+		<% end %>
+	</tr>
+	<% end %>
+</table><hr>
+		
+<%= link_to_function 'Add an Album?', '$("#new_album").toggle();' %><br/>
+<% @albumformdisplay = "none" %>
+<%= render :partial => 'albums/form'%>
+
+<hr>
+
+<%= link_to "Delete Artist?", @artist, :method => :delete, :confirm => "You sure?"%>
