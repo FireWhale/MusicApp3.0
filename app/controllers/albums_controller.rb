@@ -36,7 +36,7 @@ class AlbumsController < ApplicationController
     @performers = @album.performers
     @sources = @album.sources
     @publisher = @album.publisher
-    
+    @album
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @album }
@@ -288,8 +288,10 @@ class AlbumsController < ApplicationController
     @reference = url
     #Album Art
     @scrapedalbumartlink = doc.xpath("//img[@id= 'coverart']//@src").text
+    @strippedname = @name.gsub("/", "")
+    
     @albumartlink = "http://vgmdb.net" + @scrapedalbumartlink
-    open('app/assets/images/albumart/' + @name + ".jpg", 'wb') do |file|
+    open('app/assets/images/albumart/' + @strippedname + ".jpg", 'wb') do |file|
       file << open(@albumartlink).read
     end
     @albumart = 'app/assets/images/albumart/' + @name + ".jpg"
@@ -313,8 +315,7 @@ class AlbumsController < ApplicationController
     @scrapedperformers = @scrapedperformerlist.reject { |arr| arr.all?(&:blank?)}
     doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]//span[1]").each {|node|
       @linkedperformers.push(node.text)
-      }
-
+      }   
     #Sources
     @scrapedsources = doc.xpath("//td[@id='rightcolumn']/div[2]//div[@class='smallfont']//div[5]/text()").text.split(", ")
     doc.xpath("//td[@id='rightcolumn']/div[2]//span[@class='productname'][1]").each {|node|

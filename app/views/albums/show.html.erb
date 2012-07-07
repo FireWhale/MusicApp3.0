@@ -17,7 +17,7 @@
 
 <p>
   <b>Albumart:</b>
-  <%= @album.albumart %>
+<%= image_tag ("albumart/" + @album.albumart.to_s.split("/").last) %>
 </p>
 
 <p>

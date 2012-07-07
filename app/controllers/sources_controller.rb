@@ -19,7 +19,7 @@ class SourcesController < ApplicationController
     #Code for Obtained Functionality
     @source.obtained = true
     @albums.each do |each|
-      if each.albumobtained == false
+      if each.obtained == false
         @source.obtained = false
       end
     end

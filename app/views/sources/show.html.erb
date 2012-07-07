@@ -32,7 +32,7 @@
 	<% @albums.each do |each| %>
 	<tr>
 		<td><%= link_to each.name, album_path(each) %></td>
-		<% if each.albumobtained == true%>
+		<% if each.obtained == true%>
 			<td><%= image_tag("tick.png") %></td>
 		<% else %>
 			<td><%= image_tag("cross.png")%></td>
