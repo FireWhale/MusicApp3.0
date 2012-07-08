@@ -5,19 +5,15 @@
   </nav>
 </header>
 
-
-
 <p id="notice"><%= notice %></p>
 <% provide(:title, @album.name) %>
 
-<p>
-  <b>Name:</b>
+<h1>
   <%= @album.name %>
-</p>
+</h1>
 
 <p>
-  <b>Albumart:</b>
-<%= image_tag ("albumart/" + @album.albumart.to_s.split("/").last) %>
+<%= image_tag ("albumart/" + @album.albumart.gsub("/", "")) %>
 </p>
 
 <p>
@@ -35,6 +31,11 @@
 <p>
   <b>Genre:</b>
   <%= @album.genre %>
+</p>
+
+<p>
+  <b>Classification:</b>
+  <%= @album.classification %>
 </p>
 
 <p>

@@ -204,7 +204,7 @@ class AlbumsController < ApplicationController
     @exists.each do |each|
       @existence = each.name #setting an instance variable as 'each' name
       if params[@existence] == "0" #checking the value of params[each.name] (which was set to 0 when unchecked.)
-        @album.arrangers.delete(Artist.find_by_name(each.name))
+        @album.performers.delete(Artist.find_by_name(each.name))
       end
     end
     @exists = @album.sources.dup
@@ -283,18 +283,17 @@ class AlbumsController < ApplicationController
       @genre = "Anime"
     end
     #Classification    Original or Arrangement
-    @classification = doc.xpath("//table[@id='album_infobit_large']//tr[6]//td[2]").text.split(", ")[0]
+    #@classification = doc.xpath("//table[@id='album_infobit_large']//tr[6]//td[2]").text.split(", ")[0]
     #Reference
     @reference = url
     #Album Art
     @scrapedalbumartlink = doc.xpath("//img[@id= 'coverart']//@src").text
     @strippedname = @name.gsub("/", "")
-    
     @albumartlink = "http://vgmdb.net" + @scrapedalbumartlink
     open('app/assets/images/albumart/' + @strippedname + ".jpg", 'wb') do |file|
       file << open(@albumartlink).read
     end
-    @albumart = 'app/assets/images/albumart/' + @name + ".jpg"
+    @albumart = @name + ".jpg"
     #Publisher
     @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]//span[1]").text
     #Composers  
@@ -315,13 +314,16 @@ class AlbumsController < ApplicationController
     @scrapedperformers = @scrapedperformerlist.reject { |arr| arr.all?(&:blank?)}
     doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]//span[1]").each {|node|
       @linkedperformers.push(node.text)
-      }   
+      }
+    doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]/a/text()").each {|node|
+      @linkedperformers.push(node.text)
+      }    
     #Sources
     @scrapedsources = doc.xpath("//td[@id='rightcolumn']/div[2]//div[@class='smallfont']//div[5]/text()").text.split(", ")
     doc.xpath("//td[@id='rightcolumn']/div[2]//span[@class='productname'][1]").each {|node|
       @scrapedsources.push(node.text)
       }
-    @album = Album.new :name => @name, :releasedate => @datenum, :catalognumber => @catalognumber, :genre => @genre, :classification => @classification, :reference => @reference, :albumart => @albumart
+    @album = Album.new :name => @name, :releasedate => @datenum, :catalognumber => @catalognumber, :genre => @genre, :reference => @reference, :albumart => @albumart
     
     respond_to do |format|
       format.html # scrape!

@@ -33,7 +33,7 @@
   </div>
   <div class="field">
     <%= f.label :classification %><br />
-    <%= f.text_field :classification %>
+    <%= f.select :classification, [['Original', 'Original'], ['Arrangement', 'Arrangement']], :include_blank => true %>
   </div>
   <div class="field">
     <%= f.label :reference %><br />

@@ -23,7 +23,6 @@
     <th>Obtained</th>
     <th>Name</th>
     <th>Releasedate</th>
-    <th>Catalog Number</th>
     <th>Reference</th>
     <th>Publisher</th> 
     <th>Source</th>
@@ -40,7 +39,6 @@
 	<% end %>
     <td><%= link_to album.name, album %></td>
     <td><%= album.releasedate %></td>
-    <td><%= album.catalognumber %></td>
     <td><%= album.reference %></td>
     <td><% if @publisher.nil? == false %>
   		  <%= link_to @publisher.name, publisher_path(@publisher) %>
