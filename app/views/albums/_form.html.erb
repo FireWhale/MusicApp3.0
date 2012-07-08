@@ -29,7 +29,7 @@
   </div>
   <div class="field">
     <%= f.label :genre %><br />
-    <%= f.text_field :genre %>
+    <%= f.select :genre, [['Anime', 'Anime'], ['Game', 'Game']], :include_blank => true %>
   </div>
   <div class="field">
     <%= f.label :classification %><br />
@@ -72,15 +72,19 @@
   <% end %>  
   
   <% if @title == "screenscrape"%>
-  	<h1>Linked Composers</h1>
-  	<% @linkedcomposers.each do |composer|%>
+  	<% if @linkedcomposers.empty? == false %>
+  	  <h1>Linked Composers</h1>
+  	  <% @linkedcomposers.each do |composer|%>
   		<% @holder = composer %>
   		<%= render :partial => 'albums/add_composer_form' %>
+  	  <% end %>
   	<% end %>
-  	<h1>Unlinked Composers </h1>
-  	<% @scrapedcomposers.each do |composer|%>
+  	<% if @scrapedcomposers.empty? == false %>
+  	  <h1>Unlinked Composers </h1>
+  	  <% @scrapedcomposers.each do |composer|%>
   		<% @holder = composer %>
   		<%= render :partial => 'albums/add_composer_form' %>
+  	  <% end %>
   	<% end %>
   <% end %>
   <% @holder = "" %>
@@ -88,7 +92,7 @@
   <%= render :partial => 'albums/add_composer_form' %>
    <div id="AddComposerField"></div>
   <%= link_to "Add another Composer Field", addcomposerform_path, :remote => true %></br></br>
-  
+
   <% if @title == "edit" and @album.arrangers.empty? == false %>  
     Arranger(s) (uncheck to remove):
   	<% @arrangers.each do |each| %>
@@ -101,15 +105,19 @@
   <% end %>
 
   <% if @title == "screenscrape"%>
-  	<h1>Linked Arrangers</h1>
-  	<% @linkedarrangers.each do |arranger|%>
+  	<% if @linkedarrangers.empty? == false %>
+  	  <h1>Linked Arrangers</h1>
+  	  <% @linkedarrangers.each do |arranger|%>
   		<% @holder = arranger %>
   		<%= render :partial => 'albums/add_arranger_form' %>
+  	  <% end %>
   	<% end %>
-  	<h1>Unlinked Arrangers </h1>
-  	<% @scrapedarrangers.each do |arranger|%>
+  	<% if @scrapedarrangers.empty? == false %>
+  	  <h1>Unlinked Arrangers </h1>
+  	  <% @scrapedarrangers.each do |arranger|%>
   		<% @holder = arranger %>
   		<%= render :partial => 'albums/add_arranger_form' %>
+  	  <% end %>
   	<% end %>
   <% end %>
   <% @holder = "" %>
@@ -130,15 +138,19 @@
   <% end %>  
 
   <% if @title == "screenscrape"%>
-  	<h1>Linked Performers</h1>
-  	<% @linkedperformers.each do |performer| %>
+  	<% if @linkedperformers.empty? == false %>
+  	  <h1>Linked Performers</h1>
+  	  <% @linkedperformers.each do |performer| %>
   		<% @holder = performer %>
   		<%= render :partial => 'albums/add_performer_form' %>
+  	  <% end %>
   	<% end %>
+  	<% if @scrapedperformers.empty? == false %>
   	<h1>Unlinked Performers </h1>
-  	<% @scrapedperformers.each do |performer|%>
+  	  <% @scrapedperformers.each do |performer|%>
   		<% @holder = performer %>
   		<%= render :partial => 'albums/add_performer_form' %>
+  	  <% end %>
   	<% end %>
   <% end %>
   <% @holder = "" %>  

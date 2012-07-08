@@ -13,7 +13,7 @@
 </h1>
 
 <p>
-<%= image_tag ("albumart/" + @album.albumart.gsub("/", "")) %>
+<%= image_tag ("albumart/" + @album.albumart.gsub("/", "").gsub("\"", "")) %>
 </p>
 
 <p>

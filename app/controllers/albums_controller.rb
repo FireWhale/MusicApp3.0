@@ -36,6 +36,7 @@ class AlbumsController < ApplicationController
     @performers = @album.performers
     @sources = @album.sources
     @publisher = @album.publisher
+    
     @album
     respond_to do |format|
       format.html # show.html.erb
@@ -268,9 +269,9 @@ class AlbumsController < ApplicationController
     url = params[:website]
     doc = Nokogiri::HTML(open(url))
     #Name
-    @name = doc.xpath("//span[@class='albumtitle']").first.text
+    @name = doc.xpath("//span[@class='albumtitle']").first.text.chomp(" ")
     #Catalog Number
-    @catalognumber = doc.xpath("//table[@id='album_infobit_large']//tr[1]//td[2]").text.split(' ')[0]
+    @catalognumber = doc.xpath("//table[@id='album_infobit_large']//tr[1]//td[2]").text.split(' ')[0].chomp(" ")
     #Date
     @date = doc.xpath("//table[@id='album_infobit_large']//tr[2]//td[2]").text
     @datenum = Date.parse @date
@@ -282,46 +283,59 @@ class AlbumsController < ApplicationController
     if @genre == "Animation"
       @genre = "Anime"
     end
+    if @genre == "Anime" or @genre == "Game"
+      #do nothing
+    else
+      @genre = ""
+    end
     #Classification    Original or Arrangement
     #@classification = doc.xpath("//table[@id='album_infobit_large']//tr[6]//td[2]").text.split(", ")[0]
     #Reference
     @reference = url
     #Album Art
     @scrapedalbumartlink = doc.xpath("//img[@id= 'coverart']//@src").text
-    @strippedname = @name.gsub("/", "")
+    @strippedname = @name.gsub("/", "").gsub("\"", "")
     @albumartlink = "http://vgmdb.net" + @scrapedalbumartlink
     open('app/assets/images/albumart/' + @strippedname + ".jpg", 'wb') do |file|
       file << open(@albumartlink).read
     end
     @albumart = @name + ".jpg"
     #Publisher
-    @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]//span[1]").text
+    @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]//span[1]").text.chomp(" ")
     #Composers  
     @scrapedcomposerlist = doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]/text()").text.split(", ")
     @scrapedcomposers = @scrapedcomposerlist.reject { |arr| arr.all?(&:blank?)}
     @linkedcomposers = []
     doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]//span[1]").each {|node|
-      @linkedcomposers.push(node.text)
+      @linkedcomposers.push(node.text.chomp(" "))
       }
+    doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]/a/text()").each {|node|
+      @linkedcomposers.push(node.text.chomp(" "))
+      }   
+    #Arrangers
     @scrapedarrangerlist = doc.xpath("//table[@id='album_infobit_large']//tr[9]//td[2]/text()").text.split(", ")
     @linkedarrangers = []
     @scrapedarrangers = @scrapedarrangerlist.reject { |arr| arr.all?(&:blank?)}
     doc.xpath("//table[@id='album_infobit_large']//tr[9]//td[2]//span[1]").each {|node|
-      @linkedarrangers.push(node.text)
+      @linkedarrangers.push(node.text.chomp(" "))
       }
+    doc.xpath("//table[@id='album_infobit_large']//tr[9]//td[2]/a/text()").each {|node|
+      @linkedarrangers.push(node.text.chomp(" "))
+      }   
+    #APerformers
     @linkedperformers = []
     @scrapedperformerlist = doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]/text()").text.split(", ")
     @scrapedperformers = @scrapedperformerlist.reject { |arr| arr.all?(&:blank?)}
     doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]//span[1]").each {|node|
-      @linkedperformers.push(node.text)
+      @linkedperformers.push(node.text.chomp(" "))
       }
     doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]/a/text()").each {|node|
-      @linkedperformers.push(node.text)
+      @linkedperformers.push(node.text.chomp(" "))
       }    
     #Sources
     @scrapedsources = doc.xpath("//td[@id='rightcolumn']/div[2]//div[@class='smallfont']//div[5]/text()").text.split(", ")
     doc.xpath("//td[@id='rightcolumn']/div[2]//span[@class='productname'][1]").each {|node|
-      @scrapedsources.push(node.text)
+      @scrapedsources.push(node.text.chomp(" "))
       }
     @album = Album.new :name => @name, :releasedate => @datenum, :catalognumber => @catalognumber, :genre => @genre, :reference => @reference, :albumart => @albumart
     

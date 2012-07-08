@@ -1,15 +1,33 @@
 <p id="notice"><%= notice %></p>
+<% provide(:title, @publisher.name) %>
 
 <p>
   <b>Name:</b>
   <%= @publisher.name %>
 </p>
 
+<%= link_to 'Edit', edit_publisher_path(@publisher) %> 
+
 <p>
   <b>Reference:</b>
   <%= @publisher.reference %>
-</p>
+</p><hr>
 
+<b>Album(s):</b></br>
+<table id="AlbumTable">
+	<% @albums.each do |each| %>
+	<tr>
+		<td><%= link_to each.name, album_path(each) %></td>
+		<% if each.obtained == true%>
+			<td><%= image_tag("tick.png") %></td>
+		<% else %>
+			<td><%= image_tag("cross.png")%></td>
+		<% end %>
+	</tr>
+	<% end %>
+</table><hr>
 
-<%= link_to 'Edit', edit_publisher_path(@publisher) %> |
-<%= link_to 'Back', publishers_path %>
+|
+
+<%= link_to "Delete Source?", @publisher, :method => :delete, :confirm => "You sure?" %>
+

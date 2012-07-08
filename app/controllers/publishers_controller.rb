@@ -14,6 +14,7 @@ class PublishersController < ApplicationController
   # GET /publishers/1.json
   def show
     @publisher = Publisher.find(params[:id])
+    @albums = @publisher.albums
 
     respond_to do |format|
       format.html # show.html.erb

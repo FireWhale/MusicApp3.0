@@ -20,12 +20,13 @@
 
 <table id="AlbumTable">
   <tr>
-    <th>Obtained</th>
+    <th></th>
     <th>Name</th>
-    <th>Releasedate</th>
-    <th>Reference</th>
+    <th>Release Date</th>
+    <th>Genre</th>
     <th>Publisher</th> 
     <th>Source</th>
+    <th>Reference</th>
   </tr>
 
 <% @sorted.each do |album| %>
@@ -39,13 +40,14 @@
 	<% end %>
     <td><%= link_to album.name, album %></td>
     <td><%= album.releasedate %></td>
-    <td><%= album.reference %></td>
+    <td><%= album.genre %></td>
     <td><% if @publisher.nil? == false %>
   		  <%= link_to @publisher.name, publisher_path(@publisher) %>
     	<% end %>
     <td><% @sources.each do |each| %>
 		  <%= link_to each.name, source_path(each) %></br>
 		<% end %>
+    <td><%= link_to "vgmdb", album.reference %></td>
   </tr>
 <% end %>
 </table>

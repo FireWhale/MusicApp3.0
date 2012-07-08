@@ -1,22 +1,26 @@
-<h1>Listing artists</h1>
+<h1>All Artists (<%= @artists.count %>)</h1>
 <% provide(:title, 'All Artists') %>
 
 <table>
   <tr>
     <th>Name</th>
-    <th>Reference</th>
     <th>Activity</th>
-    <th>Database activity</th>
+    <th>Database Activity</th>
     <th>Obtained</th>
+    <th>Reference</th>
   </tr>
 
 <% @artistssorted.each do |artist| %>
   <tr>
     <td><%= link_to artist.name, artist %></td>
-    <td><%= artist.reference %></td>
     <td><%= artist.activity %></td>
     <td><%= artist.database_activity %></td>
     <td><%= artist.obtained %></td>
+    <% if artist.reference.blank? == true %>
+    <td><%= artist.reference %></td>
+    <% else %>
+    <td><%= link_to artist.reference, artist.reference %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
