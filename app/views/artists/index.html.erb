@@ -1,5 +1,28 @@
-<h1>All Artists (<%= @artists.count %>)</h1>
-<% provide(:title, 'All Artists') %>
+<header>
+	<nav>
+<% if params[:filter] != "filterignored" %>
+	<%= link_to "Filter Ignored", artists_path(:filter => "filterignored") %></br>
+<% end %>
+<% if params[:filter] != "nofilter" %>
+	<%= link_to "No filter", artists_path(:filter => "nofilter") %></br>
+<% end %>
+<% if params[:filter] != "filterlowpriority" %>
+	<%= link_to "No filter", artists_path(:filter => "lowpriority") %></br>
+<% end %>
+  	</nav>
+</header>
+
+<% if params[:filter] == "nofilter" %>
+	<h1>All Artists (<%= @artists.size %>)</h1>
+	<% provide(:title, 'All Artists') %>
+<% end %>
+<% if params[:filter] == "filterignored" %>
+	<h1>All Artists (<%= Artist.count - Artist.count(:conditions => ['database_activity = ?', 'Ignored']) %>)</h1>
+	<% provide(:title, 'All Artists') %>
+<% end %><% if params[:filter] == "filterignored" %>
+	<h1>All Artists (<%= Artist.count - Artist.count(:conditions => ['database_activity = ?', 'Ignored']) - Artist.count(:conditions => ['database_activity = ?', 'Low Priority']) %>)</h1>
+	<% provide(:title, 'All Artists') %>
+<% end %>
 
 <table>
   <tr>
@@ -11,6 +34,7 @@
   </tr>
 
 <% @artistssorted.each do |artist| %>
+  <% if params[:filter] != "filterignored" %>
   <tr>
     <td><%= link_to artist.name, artist %></td>
     <td><%= artist.activity %></td>
@@ -22,6 +46,21 @@
     <td><%= link_to artist.reference, artist.reference %></td>
     <% end %>
   </tr>
+  <% else %>
+  	<% if artist.database_activity != "Ignored"%>
+  	<tr>
+      <td><%= link_to artist.name, artist %></td>
+      <td><%= artist.activity %></td>
+      <td><%= artist.database_activity %></td>
+      <td><%= artist.obtained %></td>
+      <% if artist.reference.blank? == true %>
+      <td><%= artist.reference %></td>
+      <% else %>
+      <td><%= link_to artist.reference, artist.reference %></td>
+      <% end %>
+    </tr>
+    <% end %>  	
+  <% end %>
 <% end %>
 </table>
 

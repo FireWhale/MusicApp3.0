@@ -12,9 +12,11 @@
   <%= @album.name %>
 </h1>
 
+<% if @album.albumart != ""%>
 <p>
 <%= image_tag ("albumart/" + @album.albumart.gsub("/", "").gsub("\"", "")) %>
 </p>
+<% end %>
 
 <p>
   <b>Catalog Number:</b>

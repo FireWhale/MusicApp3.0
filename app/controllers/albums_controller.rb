@@ -5,7 +5,7 @@ class AlbumsController < ApplicationController
     @albums = Album.all
     #Setting a default value for the params[:sort]
     if params[:sort].blank? or not Album.column_names.include? params[:sort]
-      params[:sort] = "releasedate"
+      params[:sort] = "created_at"
     end
     #Inserting values by each case: Name, Date, (Soon: By Alphabet!)
     if params[:sort] == "name"
@@ -283,9 +283,7 @@ class AlbumsController < ApplicationController
     if @genre == "Animation"
       @genre = "Anime"
     end
-    if @genre == "Anime" or @genre == "Game"
-      #do nothing
-    else
+    if @genre != "Anime" or @genre != "Game"
       @genre = ""
     end
     #Classification    Original or Arrangement
@@ -294,17 +292,25 @@ class AlbumsController < ApplicationController
     @reference = url
     #Album Art
     @scrapedalbumartlink = doc.xpath("//img[@id= 'coverart']//@src").text
-    @strippedname = @name.gsub("/", "").gsub("\"", "")
-    @albumartlink = "http://vgmdb.net" + @scrapedalbumartlink
-    open('app/assets/images/albumart/' + @strippedname + ".jpg", 'wb') do |file|
-      file << open(@albumartlink).read
+    if @scrapedalbumartlink == "http://media.vgmdb.net/img/album-nocover-medium.gif"
+      @albumart = ""
+    else
+      @strippedname = @name.gsub("/", "").gsub("\"", "")
+      @albumartlink = "http://vgmdb.net" + @scrapedalbumartlink
+      open('app/assets/images/albumart/' + @strippedname + ".jpg", 'wb') do |file|
+        file << open(@albumartlink).read
+      @albumart = @name + ".jpg"
+      end
     end
-    @albumart = @name + ".jpg"
     #Publisher
     @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]//span[1]").text.chomp(" ")
     #Composers  
     @scrapedcomposerlist = doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]/text()").text.split(", ")
-    @scrapedcomposers = @scrapedcomposerlist.reject { |arr| arr.all?(&:blank?)}
+    @scrapedcomposer = @scrapedcomposerlist.reject { |arr| arr.all?(&:blank?)}
+    @scrapedcomposers = []
+    @scrapedcomposer.each do |each|
+      @scrapedcomposers.push(each.chomp(" "))
+    end
     @linkedcomposers = []
     doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]//span[1]").each {|node|
       @linkedcomposers.push(node.text.chomp(" "))
@@ -315,7 +321,11 @@ class AlbumsController < ApplicationController
     #Arrangers
     @scrapedarrangerlist = doc.xpath("//table[@id='album_infobit_large']//tr[9]//td[2]/text()").text.split(", ")
     @linkedarrangers = []
-    @scrapedarrangers = @scrapedarrangerlist.reject { |arr| arr.all?(&:blank?)}
+    @scrapedarranger = @scrapedarrangerlist.reject { |arr| arr.all?(&:blank?)}
+    @scrapedarrangers = []
+    @scrapedarranger.each do |each|
+      @scrapedarrangers.push(each.chomp(" "))
+    end
     doc.xpath("//table[@id='album_infobit_large']//tr[9]//td[2]//span[1]").each {|node|
       @linkedarrangers.push(node.text.chomp(" "))
       }
@@ -325,7 +335,11 @@ class AlbumsController < ApplicationController
     #APerformers
     @linkedperformers = []
     @scrapedperformerlist = doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]/text()").text.split(", ")
-    @scrapedperformers = @scrapedperformerlist.reject { |arr| arr.all?(&:blank?)}
+    @scrapedperformer = @scrapedperformerlist.reject { |arr| arr.all?(&:blank?)}
+    @scrapedperformers = []
+    @scrapedperformer.each do |each|
+      @scrapedperformers.push(each.chomp(" "))
+    end
     doc.xpath("//table[@id='album_infobit_large']//tr[10]//td[2]//span[1]").each {|node|
       @linkedperformers.push(node.text.chomp(" "))
       }
@@ -333,7 +347,11 @@ class AlbumsController < ApplicationController
       @linkedperformers.push(node.text.chomp(" "))
       }    
     #Sources
-    @scrapedsources = doc.xpath("//td[@id='rightcolumn']/div[2]//div[@class='smallfont']//div[5]/text()").text.split(", ")
+    @scrapedsource = doc.xpath("//td[@id='rightcolumn']/div[2]//div[@class='smallfont']//div[5]/text()").text.split(", ")
+    @scrapedsources = []
+    @scrapedsource.each do |each|
+      @scrapedsources.push(each.chomp(" "))
+    end
     doc.xpath("//td[@id='rightcolumn']/div[2]//span[@class='productname'][1]").each {|node|
       @scrapedsources.push(node.text.chomp(" "))
       }

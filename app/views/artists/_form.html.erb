@@ -25,7 +25,7 @@
   </div>
   <div class="field">
     <%= f.label 'Database Records' %><br />
-    <%= f.select :database_activity, [['Up to Date', 'Up to Date'], ['Not Up to Date', 'Not Up to Date'], ['Ignored', 'Ignored']], :include_blank => true %>
+    <%= f.select :database_activity, [['Up to Date', 'Up to Date'], ['Not Up to Date', 'Not Up to Date'], ['Low Priority', 'Low Priority']['Ignored', 'Ignored']], :include_blank => true %>
   </div>
   <% if @title == "edit" %>
 	<% if @aliases.empty? == false %>

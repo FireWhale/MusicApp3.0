@@ -4,7 +4,10 @@ class ArtistsController < ApplicationController
   def index
     @artists = Artist.all
     @artistssorted = @artists.sort! { |a,b| a.name.downcase <=> b.name.downcase }
-
+    
+    if params[:filter].blank?
+      params[:filter] = "nofilter"
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @artists }

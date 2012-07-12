@@ -8,4 +8,5 @@ class Album < ActiveRecord::Base
   has_and_belongs_to_many :performers, :class_name => "Artist", :join_table => "albums_performers"
   
   validates :name, :presence => true 
+  validates_uniqueness_of :name, :scope => [:reference, :catalognumber]
 end

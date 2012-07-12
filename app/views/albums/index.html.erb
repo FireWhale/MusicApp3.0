@@ -26,7 +26,7 @@
     <th>Genre</th>
     <th>Publisher</th> 
     <th>Source</th>
-    <th>Reference</th>
+    <th>Ref.</th>
   </tr>
 
 <% @sorted.each do |album| %>
@@ -47,7 +47,7 @@
     <td><% @sources.each do |each| %>
 		  <%= link_to each.name, source_path(each) %></br>
 		<% end %>
-    <td><%= link_to "vgmdb", album.reference %></td>
+    <td><%= link_to "Link", album.reference %></td>
   </tr>
 <% end %>
 </table>

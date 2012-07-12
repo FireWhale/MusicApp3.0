@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :releasedate %><br />
-    <%= f.date_select :releasedate, :default => @datenum %>
+    <%= f.date_select :releasedate, :default => @datenum, :start_year => 1970, :include_blank => true  %>
   </div>
   <div class="field">
     <%= f.label :catalognumber, "Catalog Number" %><br />
