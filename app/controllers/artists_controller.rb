@@ -1,13 +1,25 @@
 class ArtistsController < ApplicationController
   # GET /artists
   # GET /artists.json
-  def index
-    @artists = Artist.all
-    @artistssorted = @artists.sort! { |a,b| a.name.downcase <=> b.name.downcase }
-    
+  def index 
+    @artists = Artist.all   
+    #Filtering Code
     if params[:filter].blank?
       params[:filter] = "nofilter"
+    end        
+    if params[:filter] == "nofilter"
+      blacklist = []
+    end    
+    if params[:filter] == "filterignored"
+      blacklist = ["Ignored"]     
+    end    
+    if params[:filter] == "filterlowpriority"
+      blacklist = ["Ignored", "Low Priority"]     
     end
+    #Sorting Code
+    @filteredartists = @artists.reject { |h| blacklist.include? h['database_activity']}
+    @artistssorted = @filteredartists.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @artists }

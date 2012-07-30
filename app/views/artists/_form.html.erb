@@ -25,7 +25,7 @@
   </div>
   <div class="field">
     <%= f.label 'Database Records' %><br />
-    <%= f.select :database_activity, [['Up to Date', 'Up to Date'], ['Not Up to Date', 'Not Up to Date'], ['Low Priority', 'Low Priority']['Ignored', 'Ignored']], :include_blank => true %>
+    <%= f.select :database_activity, [['Up to Date', 'Up to Date'], ['Not Up to Date', 'Not Up to Date'], ['Low Priority', 'Low Priority'], ['Ignored', 'Ignored']], :include_blank => true %>
   </div>
   <% if @title == "edit" %>
 	<% if @aliases.empty? == false %>
@@ -48,6 +48,12 @@
 		<% end %>
 	<% end %>  
 	<%= render 'add_member_form' %>
+  <% end %>
+  <%= fields_for(:artist) do |f| %>   
+    <div class="field">
+      <%= f.label :note %><br />
+      <%= f.text_area :note %>
+    </div>
   <% end %>
   <div class="actions">
     <%= f.submit %>

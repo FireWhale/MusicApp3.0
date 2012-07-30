@@ -14,7 +14,7 @@
 
 <% if @album.albumart != ""%>
 <p>
-<%= image_tag ("albumart/" + @album.albumart.gsub("/", "").gsub("\"", "")) %>
+<%= image_tag ("albumart/" + @album.albumart) %>
 </p>
 <% end %>
 

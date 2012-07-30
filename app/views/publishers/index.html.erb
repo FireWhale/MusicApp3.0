@@ -7,10 +7,10 @@
     <th>Albums</th>
   </tr>
 
-<% @publishers.each do |publisher| %>
+<% @publisherssorted.each do |publisher| %>
   <% @albums = publisher.albums %>
   <tr>
-    <td><%= publisher.name %></td>
+    <td><%= link_to publisher.name, publisher_path(publisher) %></td>
     <td><%= publisher.reference %></td>
     <td><% @albums.each do |each| %>
 		  <%= link_to each.name, album_path(each) %></br>

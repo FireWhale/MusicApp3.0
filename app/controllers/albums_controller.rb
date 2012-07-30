@@ -13,7 +13,7 @@ class AlbumsController < ApplicationController
       @title = "Name"      
     end
     if params[:sort] == "releasedate"
-      @sorted = @albums.sort! { |a,b| b.releasedate <=> a.releasedate }  
+      @sorted = @albums.sort! { |a,b| b.releasedate.to_s <=> a.releasedate.to_s }  
       @title = "Release Date"
     end
     if params[:sort] == "created_at"
@@ -295,11 +295,11 @@ class AlbumsController < ApplicationController
     if @scrapedalbumartlink == "http://media.vgmdb.net/img/album-nocover-medium.gif"
       @albumart = ""
     else
-      @strippedname = @name.gsub("/", "").gsub("\"", "")
+      @strippedname = @name.gsub("/", "").gsub("\"", "").gsub("|", "").gsub("?", "").gsub("*", "").gsub(":", "").gsub("#", "")
       @albumartlink = "http://vgmdb.net" + @scrapedalbumartlink
       open('app/assets/images/albumart/' + @strippedname + ".jpg", 'wb') do |file|
         file << open(@albumartlink).read
-      @albumart = @name + ".jpg"
+      @albumart = @name.gsub("/", "").gsub("\"", "").gsub("|", "").gsub("?", "").gsub("*", "").gsub(":", "").gsub("#", "") + ".jpg"
       end
     end
     #Publisher

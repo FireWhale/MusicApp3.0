@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120702220106) do
+ActiveRecord::Schema.define(:version => 20120730201537) do
 
   create_table "albums", :force => true do |t|
     t.string   "name"
@@ -26,6 +26,12 @@ ActiveRecord::Schema.define(:version => 20120702220106) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
+
+  add_index "albums", ["created_at"], :name => "index_albums_on_created_at"
+  add_index "albums", ["id"], :name => "index_albums_on_id"
+  add_index "albums", ["name"], :name => "index_albums_on_name"
+  add_index "albums", ["releasedate"], :name => "index_albums_on_releasedate"
+  add_index "albums", ["updated_at"], :name => "index_albums_on_updated_at"
 
   create_table "albums_arrangers", :id => false, :force => true do |t|
     t.integer "album_id"
@@ -65,12 +71,19 @@ ActiveRecord::Schema.define(:version => 20120702220106) do
     t.datetime "updated_at",        :null => false
   end
 
+  add_index "artists", ["database_activity"], :name => "index_artists_on_database_activity"
+  add_index "artists", ["id"], :name => "index_artists_on_id"
+  add_index "artists", ["name"], :name => "index_artists_on_name"
+
   create_table "publishers", :force => true do |t|
     t.string   "name"
     t.string   "reference"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "publishers", ["id"], :name => "index_publishers_on_id"
+  add_index "publishers", ["name"], :name => "index_publishers_on_name"
 
   create_table "sources", :force => true do |t|
     t.string   "name"
@@ -82,6 +95,10 @@ ActiveRecord::Schema.define(:version => 20120702220106) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
+
+  add_index "sources", ["database_activity"], :name => "index_sources_on_database_activity"
+  add_index "sources", ["id"], :name => "index_sources_on_id"
+  add_index "sources", ["name"], :name => "index_sources_on_name"
 
   create_table "units", :force => true do |t|
     t.integer  "unit_id"

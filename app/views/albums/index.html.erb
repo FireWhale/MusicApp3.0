@@ -25,7 +25,6 @@
     <th>Release Date</th>
     <th>Genre</th>
     <th>Publisher</th> 
-    <th>Source</th>
     <th>Ref.</th>
   </tr>
 
@@ -44,9 +43,11 @@
     <td><% if @publisher.nil? == false %>
   		  <%= link_to @publisher.name, publisher_path(@publisher) %>
     	<% end %>
+    <% if false %>
     <td><% @sources.each do |each| %>
 		  <%= link_to each.name, source_path(each) %></br>
 		<% end %>
+    <% end %>
     <td><%= link_to "Link", album.reference %></td>
   </tr>
 <% end %>

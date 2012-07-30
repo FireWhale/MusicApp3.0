@@ -3,6 +3,8 @@ class PublishersController < ApplicationController
   # GET /publishers.json
   def index
     @publishers = Publisher.all
+    @publisherssorted = @publishers.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    
 
     respond_to do |format|
       format.html # index.html.erb
