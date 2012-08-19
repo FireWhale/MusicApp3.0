@@ -11,9 +11,6 @@ Without further ado, let's start with the research
      e. Join Tables: Album/Artist Composer, Arranger, Performer, Album/Source, Aliases, Units
 2. Create a Website to view the database.
 
-
-
-
 -----Website Research-----
 1. vgmdb.net
 	a. Information

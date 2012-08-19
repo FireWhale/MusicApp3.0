@@ -16,6 +16,11 @@ class ArtistsController < ApplicationController
     if params[:filter] == "filterlowpriority"
       blacklist = ["Ignored", "Low Priority"]     
     end
+    if params[:filter] == "watchedonly"
+      blacklist = ["Ignored", "Low Priority"]
+      whitelist = ["Up to Date", "Not Up to Date"]
+      @artists = @artists.select { |h| whitelist.include? h['database_activity'] }
+    end
     #Sorting Code
     @filteredartists = @artists.reject { |h| blacklist.include? h['database_activity']}
     @artistssorted = @filteredartists.sort! { |a,b| a.name.downcase <=> b.name.downcase }

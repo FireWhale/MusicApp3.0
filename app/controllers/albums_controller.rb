@@ -303,7 +303,7 @@ class AlbumsController < ApplicationController
       end
     end
     #Publisher
-    @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]//span[1]").text.chomp(" ")
+    @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]/a[1]/span[1]").text.chomp(" ")
     #Composers  
     @scrapedcomposerlist = doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]/text()").text.split(", ")
     @scrapedcomposer = @scrapedcomposerlist.reject { |arr| arr.all?(&:blank?)}

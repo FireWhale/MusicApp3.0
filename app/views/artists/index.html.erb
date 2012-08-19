@@ -1,13 +1,16 @@
 <header>
 	<nav>
 <% if params[:filter] != "filterignored" %>
-	<%= link_to "Filter Ignored Artists", artists_path(:filter => "filterignored") %></br>
+	<%= link_to "Filter Ignored Artists", artists_path(:filter => "filterignored") %><br>
 <% end %>
 <% if params[:filter] != "nofilter" %>
-	<%= link_to "No filter", artists_path(:filter => "nofilter") %></br>
+	<%= link_to "No filter", artists_path(:filter => "nofilter") %><br>
 <% end %>
 <% if params[:filter] != "filterlowpriority" %>
-	<%= link_to "Filter Low Priority Artists", artists_path(:filter => "filterlowpriority") %></br>
+	<%= link_to "Filter Low Priority Artists", artists_path(:filter => "filterlowpriority") %><br>
+<% end %>
+<% if params[:filter] != "watchedonly" %>
+	<%= link_to "Watched Artists Only", artists_path(:filter => "watchedonly") %><br>
 <% end %>
   	</nav>
 </header>

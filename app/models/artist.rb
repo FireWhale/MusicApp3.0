@@ -9,5 +9,5 @@ class Artist < ActiveRecord::Base
   has_many :units, :foreign_key => "unit_id", :dependent => :destroy
   has_many :members, :through => :units, :source => :unit
   
-  validates:name, :presence => true, :uniqueness => true
+  validates:name, :presence => true
 end
