@@ -27,6 +27,18 @@
     <%= f.label :database_activity %><br />
     <%= f.select :database_activity, [['Up to Date', 'Up to Date'], ['Not Up to Date', 'Not Up to Date'], ['Ignored', 'Ignored']], :include_blank => true %>
   </div>
+  <% if @title == "edit" %>
+	<% if @instances.empty? == false %>
+		Instance(s) (uncheck to remove):
+		<% @instances.each do |each| %>
+			<% @sourceinstance = Source.find_by_id(each.instance_id) %>
+			<p>	<%= @sourceinstance.name %>
+			<%= hidden_field_tag @sourcinstance.name, 0 %>
+			<%= check_box_tag @sourceinstance.name, 1, true  %>
+		<% end %>
+	<% end %>  
+	<%= render 'add_instance_form' %>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

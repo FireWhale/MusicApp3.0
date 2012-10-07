@@ -22,10 +22,34 @@
 
 <%= link_to 'Edit', edit_source_path(@source) %><hr />
 
-<p>
-  <b>Reference:</b>
-  <%= @source.reference %>
-</p><hr>
+<% if @franchiserecord.nil? == false %>
+	<p>
+ 	  Franchise: <%= link_to @franchise.name, source_path(@franchise.id) %> 
+	</p><hr>
+<% end %>
+
+
+<% if @instances.empty? == false %>
+	<b>Instances of Franchise:</b>
+	<table>
+	<% @instances.each do |each| %>
+		<tr>
+			<% @instance = Source.find_by_id(each.instance_id) %>
+			<td><%= link_to @instance.name, source_path(@instance.id) %></td>
+		</tr>
+	<% end %>
+	</table><hr>
+<% end %>
+
+<% if @source.reference.nil? == false %>
+	<p>
+		<b>Reference:</b>
+		<%= link_to @source.reference, @source.reference %>
+	</p><hr>
+<% end %>
+
+
+
 
 <b>Album(s):</b></br>
 <table id="AlbumTable">

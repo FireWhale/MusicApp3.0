@@ -1,29 +1,30 @@
 class ArtistsController < ApplicationController
   # GET /artists
   # GET /artists.json
+  
+  # List of Methods:
+  #   Index:
+  #   Show:
+  #   New:
+  #   Edit:
+  #   Create:
+  #   Update:
+  #   Destroy:
+  # Related Classes:
+  #   Album:
+  #   Unit:
+  #   Alias:
+  
+   
   def index 
-    @artists = Artist.all   
-    #Filtering Code
-    if params[:filter].blank?
-      params[:filter] = "nofilter"
-    end        
-    if params[:filter] == "nofilter"
-      blacklist = []
-    end    
-    if params[:filter] == "filterignored"
-      blacklist = ["Ignored"]     
-    end    
-    if params[:filter] == "filterlowpriority"
-      blacklist = ["Ignored", "Low Priority"]     
-    end
-    if params[:filter] == "watchedonly"
-      blacklist = ["Ignored", "Low Priority"]
-      whitelist = ["Up to Date", "Not Up to Date"]
-      @artists = @artists.select { |h| whitelist.include? h['database_activity'] }
-    end
-    #Sorting Code
-    @filteredartists = @artists.reject { |h| blacklist.include? h['database_activity']}
-    @artistssorted = @filteredartists.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    @artists = Artist.all
+    
+    #Step 1: Filtering!
+    @masterfilterlist = ['No Filter', 'Ignored', 'Low Priority', 'Only Watched']
+    filter_function(@artists, Artist, params[:filter], @masterfilterlist, 'No Filter')
+    #Step 2: Sorting!
+    @mastersortlist = ['name', 'activity', 'database_activity']
+    sort_function(@filtered, Artist, params[:sort], @mastersortlist, 'name')
     
     respond_to do |format|
       format.html # index.html.erb
@@ -47,10 +48,7 @@ class ArtistsController < ApplicationController
     end 
     #For Showing Units
     @members = @artist.units
-    @unitmember = Unit.find_by_member_id(@artist.id) #For Showing Units
-    if @unitmember.nil? == false
-      @unit = Artist.find_by_id(@unitmember[:unit_id])
-    end
+    @units= @artist.inverse_units
     #Code for Obtained Functionality
     @artist.obtained = true
     @albums.each do |each|
@@ -120,16 +118,7 @@ class ArtistsController < ApplicationController
       end
     end
     #Creating An Alias Association
-    if params[:alias][:name].to_s.empty? == false
-      @alias = Artist.find_by_name(params[:alias][:name])
-      if @alias.nil? == false
-        @artist.aliases.build(:alias_id => @alias.id).save
-      else
-        @aliasnew = Artist.new(params[:alias])
-        @aliasnew.save
-        @artist.aliases.build(:alias_id => @aliasnew.id).save
-      end
-    end
+    adding_self_reference_function(Artist, @artist.aliases, :alias, :alias_id)
     #Deleting a Unit Association
     @unitsdup = @artist.units.dup
     @unitsdup.each do |each|
@@ -140,16 +129,7 @@ class ArtistsController < ApplicationController
       end
     end
     #Creating a Unit Association
-    if params[:member][:name].to_s.empty? == false
-      @member = Artist.find_by_name(params[:member][:name])
-      if @member.nil? == false
-        @artist.units.build(:member_id => @member.id).save
-      else
-        @membernew = Artist.new(params[:unit])
-        @membernew.save
-        @artist.units.build(:member_id => @membernew.id).save
-      end
-    end
+    adding_self_reference_function(Artist, @artist.units, :member, :member_id)
 
     respond_to do |format|
       if @artist.update_attributes(params[:artist])
@@ -166,6 +146,8 @@ class ArtistsController < ApplicationController
   # DELETE /artists/1.json
   def destroy
     @artist = Artist.find(params[:id])
+    @artist.units.clear
+    @
     @artist.destroy
 
     respond_to do |format|

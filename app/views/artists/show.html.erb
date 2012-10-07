@@ -41,9 +41,16 @@
 	</table><hr>
 <% end %>
 
-<% if @unitmember.nil? == false %>
-	<p>
-		Member of <%= link_to @unit.name, artist_path(@unit.id)%>
+<% if @units.empty? == false %>
+	<b>Member of:</b>
+	<table>
+		<% @units.each do |each| %>
+			<tr>
+				<% @unit = Artist.find_by_id(each.unit_id) %>
+				<td><%= link_to @unit.name, artist_path(@unit.id) %></td>
+			</tr>
+		<% end %>
+	</table> 
 	</p><hr>
 <% end %>
 

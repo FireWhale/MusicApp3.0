@@ -1,22 +1,20 @@
 <header>
 	<nav>
-<% if params[:sort] != "releasedate" %>
-	<%= link_to "Sort by Release date", albums_path(:sort => "releasedate") %></br>
-<% end %>
-<% if params[:sort] != "name" %>
-	<%= link_to "Sort by Name", albums_path(:sort => "name") %></br>
-<% end %>
-<% if params[:sort] != "created_at" %>
-	<%= link_to "Sort by Added date", albums_path(:sort => "created_at") %></br>
-<% end %>
-<% if params[:sort] != "publisher" %>
-	<%= link_to "Sort by Publisher", albums_path(:sort => "publisher") %></br>
-<% end %>
+		<% @filterlist.each do |filter| %>
+			<%= link_to filter, albums_path(:filter => filter) %></br>
+		<% end %> 
+  	</nav>
+</header>
+<header>
+	<nav>
+		<% @sortlist.each do |attribute| %>
+			<%= link_to "Sort by " + attribute[1], albums_path(:sort => attribute[0]) %></br>
+		<% end %> 
   	</nav>
 </header>
 
-<h1>All Albums (By <%= @title %>) (<%= @albums.count %>)</h1>
-<% provide(:title, 'All Albums') %>
+<h1>Album List (Sorted By <%= @sorttitle %>) (Filter: <%= params[:filter] %>)(<%= @sorted.count %>)</h1>
+<% provide(:title, 'Album List') %>
 
 <table id="AlbumTable">
   <tr>
@@ -28,26 +26,26 @@
     <th>Ref.</th>
   </tr>
 
-<% @sorted.each do |album| %>
-  <% @sources = album.sources %>
-  <% @publisher = album.publisher %>
-  <tr>
-	<% if album.obtained == true%>
-		<td><%= image_tag("tick.png") %></td>
-	<% else %>
-		<td><%= image_tag("cross.png")%></td>
-	<% end %>
-    <td><%= link_to album.name, album %></td>
-    <td><%= album.releasedate %></td>
-    <td><%= album.genre %></td>
-    <td><% if @publisher.nil? == false %>
-  		  <%= link_to @publisher.name, publisher_path(@publisher) %>
-    	<% end %>
-    <% if false %>
-    <td><% @sources.each do |each| %>
-		  <%= link_to each.name, source_path(each) %></br>
-		<% end %>
-    <% end %>
+  <% @sorted.each do |album| %>
+    <% @sources = album.sources %>
+    <% @publisher = album.publisher %>
+    <tr>
+	  <% if album.obtained == true%>
+		  <td><%= image_tag("tick.png") %></td>
+      <% else %>
+		  <td><%= image_tag("cross.png")%></td>
+	  <% end %>
+      <td><%= link_to album.name, album %></td>
+      <td><%= album.releasedate %></td>
+      <td><%= album.genre %></td>
+      <td><% if @publisher.nil? == false %>
+  		    <%= link_to @publisher.name, publisher_path(@publisher) %>
+    	  <% end %>
+      <% if false %>
+        <td><% @sources.each do |each| %>
+		      <%= link_to each.name, source_path(each) %></br>
+		    <% end %>
+      <% end %>
     <td><%= link_to "Link", album.reference %></td>
   </tr>
 <% end %>

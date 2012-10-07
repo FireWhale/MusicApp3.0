@@ -2,6 +2,15 @@ Welcome to another Iteration of my Music Database.
 This time around I'll be planning from the ground up.
 Without further ado, let's start with the research
 
+
+----Next Iteration Changes----
+1. Currently, Units is model name. Change it to Member.
+	Ex: Users own friendships
+	Ex: Artists own Members (Currently: Artists are part of a unit)
+	Ex: Artists own aliases (Curently: Alias. TrueName and Alias.)
+	Ex: Sources own instances (Currently: Get some better names here too)
+
+
 -----Overview-----
 1. Create a Database of albums, artists, and sources and allow connectiosn between the 3.
      a. Albums: name, release date, catalog number, genre, classification, albumobtained, reference, album art, notes

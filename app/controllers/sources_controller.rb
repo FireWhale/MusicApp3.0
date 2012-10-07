@@ -24,7 +24,12 @@ class SourcesController < ApplicationController
       end
     end
     @source.save
-    
+    #For showing Franchises/Instances
+    @instances = @source.franchises
+    @franchiserecord = Franchise.find_by_instance_id(@source.id) #For showing Parents
+    if @franchiserecord.nil? == false
+      @franchise = Source.find_by_id(@franchiserecord[:franchise_id])
+    end 
     #For adding an Album under an Artist
     @album = Album.new
 
@@ -49,6 +54,8 @@ class SourcesController < ApplicationController
   # GET /sources/1/edit
   def edit
     @source = Source.find(params[:id])
+    @instances = @source.franchises
+    @title = "edit"
   end
 
   # POST /sources
@@ -71,7 +78,18 @@ class SourcesController < ApplicationController
   # PUT /sources/1.json
   def update
     @source = Source.find(params[:id])
-
+    #Creating a franchise/instance association 
+    adding_self_reference_function(Source, @source.franchises, :instance, :instance_id)
+    #deleteing a franchise/instance association
+    @dup = @source.franchises.dup
+    @dup.each do |each|
+      @existence = Source.find_by_id(each.instance_id).name
+      if params[@existence] == "0"
+        @del = Franchise.find_by_instance_id(each.instance_id)
+        @del.delete.save
+      end
+    end
+    
     respond_to do |format|
       if @source.update_attributes(params[:source])
         format.html { redirect_to @source, :notice => 'Source was successfully updated.' }

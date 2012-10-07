@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  franchise: 1
+  instance: 1
+
+two:
+  franchise: 1
+  instance: 1

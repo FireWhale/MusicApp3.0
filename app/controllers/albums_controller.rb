@@ -2,24 +2,16 @@ class AlbumsController < ApplicationController
   # GET /albums
   # GET /albums.json
   def index
+    #Get the List of all albums
     @albums = Album.all
-    #Setting a default value for the params[:sort]
-    if params[:sort].blank? or not Album.column_names.include? params[:sort]
-      params[:sort] = "created_at"
-    end
-    #Inserting values by each case: Name, Date, (Soon: By Alphabet!)
-    if params[:sort] == "name"
-      @sorted = @albums.sort! { |a,b| a.name.downcase <=> b.name.downcase }
-      @title = "Name"      
-    end
-    if params[:sort] == "releasedate"
-      @sorted = @albums.sort! { |a,b| b.releasedate.to_s <=> a.releasedate.to_s }  
-      @title = "Release Date"
-    end
-    if params[:sort] == "created_at"
-      @sorted = @albums.sort! { |a,b| b.created_at <=> a.created_at }  
-      @title = "Added Date"
-    end
+    
+    #Step 1: Filtering!
+    @masterfilterlist = ['No Filter', 'Anime', 'Unobtained']
+    filter_function(@albums, Album, params[:filter], @masterfilterlist, 'No Filter')
+    #Step 2: Sorting!
+    @mastersortlist = ['name', 'releasedate', 'created_at']
+    sort_function(@filtered, Album, params[:sort], @mastersortlist, 'created_at')
+    #STep 3: Pagination!
 
     respond_to do |format|
       format.html # index.html.erb
@@ -36,8 +28,6 @@ class AlbumsController < ApplicationController
     @performers = @album.performers
     @sources = @album.sources
     @publisher = @album.publisher
-    
-    @album
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @album }
@@ -254,6 +244,7 @@ class AlbumsController < ApplicationController
       format.json { render :json => @albums }
     end
   end
+  
   def scrape
     @url = params['Website']['link']
     
@@ -262,6 +253,7 @@ class AlbumsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
   def scrapeanalbum
     require 'open-uri'
     @title = "screenscrape"
@@ -295,11 +287,11 @@ class AlbumsController < ApplicationController
     if @scrapedalbumartlink == "http://media.vgmdb.net/img/album-nocover-medium.gif"
       @albumart = ""
     else
-      @strippedname = @name.gsub("/", "").gsub("\"", "").gsub("|", "").gsub("?", "").gsub("*", "").gsub(":", "").gsub("#", "")
-      @albumartlink = "http://vgmdb.net" + @scrapedalbumartlink
+      @strippedname = @name.gsub(/[\\?\/|*:#.<>"]/, "")   
+      @albumartlink= "http://vgmdb.net" + @scrapedalbumartlink
       open('app/assets/images/albumart/' + @strippedname + ".jpg", 'wb') do |file|
         file << open(@albumartlink).read
-      @albumart = @name.gsub("/", "").gsub("\"", "").gsub("|", "").gsub("?", "").gsub("*", "").gsub(":", "").gsub("#", "") + ".jpg"
+      @albumart = @name.gsub(/[\\?\/|*:#."]/, "") + ".jpg" 
       end
     end
     #Publisher
