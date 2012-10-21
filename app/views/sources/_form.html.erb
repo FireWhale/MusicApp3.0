@@ -33,7 +33,7 @@
 		<% @instances.each do |each| %>
 			<% @sourceinstance = Source.find_by_id(each.instance_id) %>
 			<p>	<%= @sourceinstance.name %>
-			<%= hidden_field_tag @sourcinstance.name, 0 %>
+			<%= hidden_field_tag @sourceinstance.name, 0 %>
 			<%= check_box_tag @sourceinstance.name, 1, true  %>
 		<% end %>
 	<% end %>  

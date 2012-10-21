@@ -13,6 +13,21 @@ class ApplicationController < ActionController::Base
     end
   end
   
+#  def filter_function(instance, model, filterparam)
+    # Explanation of inputs
+    # Instance: The instance list of the model
+    #   @albums, @sources, @artists, @publishers
+    # model: The resource the function is working in
+    #   Album, Source, 
+    # filterlist: The list of parameters to filter out
+    #
+    # default: The default filtering behavior
+    #
+#    if filterparam.blank?
+#      filterparam =  []
+#    end
+#  end
+  
   def filter_function(item, model, filterattribute, filteroptions, default)  
     #Default Filtering
     if filterattribute.blank?
@@ -118,7 +133,8 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  def deleting_self_reference_function(resource, instance, model, objectid)
+  
+  def deleting_self_reference_function(resource, instance, model, attr_id_str, objectid)
     # Explanation of parameteres
     # resource:
     #   Artist, Album, Source, etc.
@@ -126,11 +142,17 @@ class ApplicationController < ActionController::Base
     #   @artist.units, @artist.aliases, etc.
     # model
     #   Unit, Alias
+    # attribute_id_str: String representation of the object's id
+    #   "member_id"
+    # objectid
+    #   :object_id
     @listdup = instance.dup
     @listdup.each do |each|
-      
+      @id =  each.attributes[attr_id_str]
+      @exists = resource.find_by_id(@id).name
       if params[@exists] == "0"
-        
+        @delete = model.where(objectid => @id).first
+        @delete.delete.save
       end
     end
   end

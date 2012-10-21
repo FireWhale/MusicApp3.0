@@ -4,6 +4,11 @@ class SourcesController < ApplicationController
   def index
     @sources = Source.all
     @sourcessorted = @sources.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    #Structure
+    #Check each source if they have instances (man I need a better name)
+    #if they have a source, add it to a blacklist
+    
+    
 
     respond_to do |format|
       format.html # index.html.erb
@@ -78,17 +83,9 @@ class SourcesController < ApplicationController
   # PUT /sources/1.json
   def update
     @source = Source.find(params[:id])
-    #Creating a franchise/instance association 
+    #Franchise/instance association functions
     adding_self_reference_function(Source, @source.franchises, :instance, :instance_id)
-    #deleteing a franchise/instance association
-    @dup = @source.franchises.dup
-    @dup.each do |each|
-      @existence = Source.find_by_id(each.instance_id).name
-      if params[@existence] == "0"
-        @del = Franchise.find_by_instance_id(each.instance_id)
-        @del.delete.save
-      end
-    end
+    deleting_self_reference_function(Source, @source.franchises, Franchise, "instance_id", :instance_id)
     
     respond_to do |format|
       if @source.update_attributes(params[:source])

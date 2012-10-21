@@ -40,12 +40,7 @@
       <td><%= album.genre %></td>
       <td><% if @publisher.nil? == false %>
   		    <%= link_to @publisher.name, publisher_path(@publisher) %>
-    	  <% end %>
-      <% if false %>
-        <td><% @sources.each do |each| %>
-		      <%= link_to each.name, source_path(each) %></br>
-		    <% end %>
-      <% end %>
+    	  <% end %></td>
     <td><%= link_to "Link", album.reference %></td>
   </tr>
 <% end %>

@@ -108,27 +108,11 @@ class ArtistsController < ApplicationController
   def update
     @artist = Artist.find(params[:id])
     
-    #Deleting an Alias Association
-    @aliasesdup = @artist.aliases.dup
-    @aliasesdup.each do |each|
-      @existence = Artist.find_by_id(each.alias_id).name
-      if params[@existence] == "0"
-        @aliasdel = Alias.find_by_alias_id(each.alias_id)
-        @aliasdel.delete.save
-      end
-    end
-    #Creating An Alias Association
+    #Alias Association Functions
+    deleting_self_reference_function(Artist, @artist.aliases, Alias, "alias_id", :alias_id)
     adding_self_reference_function(Artist, @artist.aliases, :alias, :alias_id)
-    #Deleting a Unit Association
-    @unitsdup = @artist.units.dup
-    @unitsdup.each do |each|
-      @existence = Artist.find_by_id(each.member_id).name
-      if params[@existence] == "0"
-        @memberdel = Unit.find_by_member_id(each.member_id)
-        @memberdel.delete.save
-      end
-    end
-    #Creating a Unit Association
+    #Unit Association Functions
+    deleting_self_reference_function(Artist, @artist.units, Unit, "member_id", :member_id)
     adding_self_reference_function(Artist, @artist.units, :member, :member_id)
 
     respond_to do |format|
@@ -147,7 +131,7 @@ class ArtistsController < ApplicationController
   def destroy
     @artist = Artist.find(params[:id])
     @artist.units.clear
-    @
+    @artist.aliases.clear
     @artist.destroy
 
     respond_to do |format|

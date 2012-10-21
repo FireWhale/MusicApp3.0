@@ -5,6 +5,11 @@ class AlbumsController < ApplicationController
     #Get the List of all albums
     @albums = Album.all
     
+    #Define the options for filtering and sorting
+    #so I want to send a params with an array of arrays
+    @filterlist = [["Name"]]
+    
+    
     #Step 1: Filtering!
     @masterfilterlist = ['No Filter', 'Anime', 'Unobtained']
     filter_function(@albums, Album, params[:filter], @masterfilterlist, 'No Filter')
@@ -347,6 +352,36 @@ class AlbumsController < ApplicationController
     doc.xpath("//td[@id='rightcolumn']/div[2]//span[@class='productname'][1]").each {|node|
       @scrapedsources.push(node.text.chomp(" "))
       }
+    #touhou function
+    @scrapedsources.map! {|each|
+        if each.starts_with?"\r\n"
+            each = each.sub("\r\n", "")
+        end
+        if each.starts_with?"Touhou"
+          case each
+          when "Touhou Youyoumu ~ Perfect Cherry Blossom", "Touhou Eiyashou ~ Imperishable Night"
+            each = each + "."
+          when "Touhou Hisouten ~ Scarlet Weather Rhapsody", "Touhou Fuujinroku ~ Mountain of Faith"
+            each = each + "."
+          when "Touhou Seirensen ~ Undefined Fantastic Object", "Touhou Chireiden ~ Subterranean Animism"
+            each = each + "."
+          when "Touhou Kaeidzuka ~ Phantasmagoria of Flower View"
+            each = each + "."
+          when "Touhou Kaikidan ~ Mystic Square"
+            each = "Touhou Kaikidan ~ Mystic Square."
+          when "Touhou Gensokyou ~ Lotus Land Story", "Touhou Gensokyo ~ Lotus Land Story"
+            each = "Touhou Gensokyo ~ Lotus Land Story."
+          when "Touhou Koumakyou ~ Embodiment of Scarlet Devil", "Touhou Koumakyou ~ the Embodiment of Scarlet Devil"
+            each = "Touhou Koumakyou ~ the Embodiment of Scarlet Devil."
+          when "Touhou Reiiden ~ Highly Responsive to Prayers"
+            each = "Touhou Rei'iden ~ Highly Responsive to Prayers."
+          when "Touhou Yumejikuu ~ Phantasmagoria of Dim. Dream"
+            each = "Touhou Yumejikuu ~ Phantasmagoria of Dim.Dream."
+          end  
+        end
+        each = each
+        }
+    #end touhou name alteration
     @album = Album.new :name => @name, :releasedate => @datenum, :catalognumber => @catalognumber, :genre => @genre, :reference => @reference, :albumart => @albumart
     
     respond_to do |format|
@@ -356,4 +391,7 @@ class AlbumsController < ApplicationController
     end
   end
   
+  def touhouname_function(input)
+
+  end
 end
