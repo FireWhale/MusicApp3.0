@@ -68,7 +68,6 @@
 <%= link_to_function 'Add an Album?', '$("#new_album").toggle();' %><br/>
 <% @albumformdisplay = "none" %>
 <%= render :partial => 'albums/form'%>
-
 <hr>
 
 <%= link_to "Delete Source?", @source, :method => :delete, :confirm => "You sure?" %>

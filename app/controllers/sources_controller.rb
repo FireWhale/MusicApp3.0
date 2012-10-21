@@ -3,13 +3,11 @@ class SourcesController < ApplicationController
   # GET /sources.json
   def index
     @sources = Source.all
-    @sourcessorted = @sources.sort! { |a,b| a.name.downcase <=> b.name.downcase }
-    #Structure
-    #Check each source if they have instances (man I need a better name)
-    #if they have a source, add it to a blacklist
+    @sources = @sources.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    @instances = Franchise.pluck(:instance_id)
+    @franchises = Franchise.pluck(:franchise_id)
+    @sources = @sources.reject { |h| @instances.include? h['id']}
     
-    
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @sources }

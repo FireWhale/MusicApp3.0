@@ -3,16 +3,32 @@
 <table>
   <tr>
     <th>Name</th>
+    <th>Instances
     <th>Database</th>
     <th>Activity</th>
   </tr>
 
-<% @sourcessorted.each do |source| %>
+<% @sources.each do |source| %>
   <tr>
     <td><%= link_to source.name, source %></td>
+  	<td><% if @franchises.include? source.id %>
+	<%= link_to_function 'Expand', "$('.#{source.id}').toggle()" %>
+	<% end %></td>
     <td><%= source.database_activity %></td>
     <td><%= source.activity %></td>
   </tr>
+  <% if @franchises.include? source.id %>
+  	<% @instances = source.franchises %>
+  	<% @instances.each do |each| %>
+  		<% @holder = Source.find_by_id(each.instance_id) %>
+  		<% @instancedisplay = "none" %>
+  		<tr class="<%=source.id%>", style="display: none">
+  			<td>------<%= link_to @holder.name, @holder %></td>
+  			<td><%= @holder.database_activity %></td>
+  			<td><%= @holder.activity %></td>
+  		</tr>
+  	<% end %>
+  <% end %>
 <% end %>
 </table>
 
