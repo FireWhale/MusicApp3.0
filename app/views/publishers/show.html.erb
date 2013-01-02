@@ -18,9 +18,10 @@
 	<% @albums.each do |each| %>
 	<tr>
 		<td><%= link_to each.name, album_path(each) %></td>
-		<% if each.obtained == true%>
+		<% if each.obtained == "t" %>
 			<td><%= image_tag("tick.png") %></td>
-		<% else %>
+		<% end %>
+		<% if each.obtained == "f" %>
 			<td><%= image_tag("cross.png")%></td>
 		<% end %>
 	</tr>

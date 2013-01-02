@@ -1,7 +1,15 @@
 <header>
   <nav>
   	<b>Album obtained:</b>
-  	<%= @album.obtained %>
+	<% if @album.obtained == "t" %>
+		<td><%= image_tag("tick.png") %></td>
+    <% end %>
+	<% if @album.obtained == "f" %>
+		<td><%= image_tag("cross.png") %></td>
+    <% end %>
+	<% if @album.obtained == "ignored" %>
+		<td><%= "Ignored" %></td>
+    <% end %>
   </nav>
 </header>
 

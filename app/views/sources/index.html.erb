@@ -1,4 +1,5 @@
-<h1>All Sources (<%= @sources.count %>)</h1>
+<h1>All Sources (<%= @allsources.count %>)</h1>
+<% provide(:title, 'Sources') %>
 
 <table>
   <tr>
@@ -23,7 +24,7 @@
   		<% @holder = Source.find_by_id(each.instance_id) %>
   		<% @instancedisplay = "none" %>
   		<tr class="<%=source.id%>", style="display: none">
-  			<td>------<%= link_to @holder.name, @holder %></td>
+  			<td><DD><%= link_to @holder.name, @holder %></td>
   			<td><%= @holder.database_activity %></td>
   			<td><%= @holder.activity %></td>
   		</tr>

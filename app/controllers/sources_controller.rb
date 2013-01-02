@@ -3,6 +3,7 @@ class SourcesController < ApplicationController
   # GET /sources.json
   def index
     @sources = Source.all
+    @allsources = Source.all #for the count
     @sources = @sources.sort! { |a,b| a.name.downcase <=> b.name.downcase }
     @instances = Franchise.pluck(:instance_id)
     @franchises = Franchise.pluck(:franchise_id)
@@ -22,7 +23,7 @@ class SourcesController < ApplicationController
     #Code for Obtained Functionality
     @source.obtained = true
     @albums.each do |each|
-      if each.obtained == false
+      if each.obtained == "f"
         @source.obtained = false
       end
     end

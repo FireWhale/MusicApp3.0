@@ -292,15 +292,18 @@ class AlbumsController < ApplicationController
     if @scrapedalbumartlink == "http://media.vgmdb.net/img/album-nocover-medium.gif"
       @albumart = ""
     else
-      @strippedname = @name.gsub(/[\\?\/|*:#.<>"]/, "")   
+      @strippedname = @name.gsub(/[\\?\/|*:#.<>%"]/, "")   
       @albumartlink= "http://vgmdb.net" + @scrapedalbumartlink
       open('app/assets/images/albumart/' + @strippedname + ".jpg", 'wb') do |file|
         file << open(@albumartlink).read
-      @albumart = @name.gsub(/[\\?\/|*:#."]/, "") + ".jpg" 
+      @albumart = @name.gsub(/[\\?\/|*:#.<>%"]/, "") + ".jpg" 
       end
     end
     #Publisher
     @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]/a[1]/span[1]").text.chomp(" ")
+    if @publisher.empty?
+      @publisher = doc.xpath("//table[@id='album_infobit_large']//tr[7]//td[2]").text.chomp(" ")
+    end
     #Composers  
     @scrapedcomposerlist = doc.xpath("//table[@id='album_infobit_large']//tr[8]//td[2]/text()").text.split(", ")
     @scrapedcomposer = @scrapedcomposerlist.reject { |arr| arr.all?(&:blank?)}
@@ -359,14 +362,18 @@ class AlbumsController < ApplicationController
         end
         if each.starts_with?"Touhou"
           case each
+          when "CLANNAD"
+            each = "Clannad"
           when "Touhou Youyoumu ~ Perfect Cherry Blossom", "Touhou Eiyashou ~ Imperishable Night"
             each = each + "."
           when "Touhou Hisouten ~ Scarlet Weather Rhapsody", "Touhou Fuujinroku ~ Mountain of Faith"
             each = each + "."
           when "Touhou Seirensen ~ Undefined Fantastic Object", "Touhou Chireiden ~ Subterranean Animism"
             each = each + "."
-          when "Touhou Kaeidzuka ~ Phantasmagoria of Flower View"
+          when "Touhou Kaeidzuka ~ Phantasmagoria of Flower View", "Touhou Bunkachou ~ Shoot the Bullet"
             each = each + "."
+          when "Touhou Shinreibyou ~ Ten Desires", "Touhou Suimusou ~ Immaterial and Missing Power"
+            each = each + "."            
           when "Touhou Kaikidan ~ Mystic Square"
             each = "Touhou Kaikidan ~ Mystic Square."
           when "Touhou Gensokyou ~ Lotus Land Story", "Touhou Gensokyo ~ Lotus Land Story"
@@ -375,7 +382,7 @@ class AlbumsController < ApplicationController
             each = "Touhou Koumakyou ~ the Embodiment of Scarlet Devil."
           when "Touhou Reiiden ~ Highly Responsive to Prayers"
             each = "Touhou Rei'iden ~ Highly Responsive to Prayers."
-          when "Touhou Yumejikuu ~ Phantasmagoria of Dim. Dream"
+          when "Touhou Yumejikuu ~ Phantasmagoria of Dim. Dream", "Touhou Yumejikuu ~ Phantasmagoria of Dim.Dream"
             each = "Touhou Yumejikuu ~ Phantasmagoria of Dim.Dream."
           end  
         end

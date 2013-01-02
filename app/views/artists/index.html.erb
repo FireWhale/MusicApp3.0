@@ -14,7 +14,7 @@
 </header>
 
 <h1>Artist List (Sorted By <%= @sorttitle %>) (Filter: <%= params[:filter] %>)(<%= @sorted.count %>)</h1>
-<% provide(:title, 'Artist List') %>
+<% provide(:title, 'Artists') %>
 
 <table>
   <tr>
@@ -30,7 +30,12 @@
       <td><%= link_to artist.name, artist %></td>
       <td><%= artist.activity %></td>
       <td><%= artist.database_activity %></td>
-      <td><%= artist.obtained %></td>
+	  <% if artist.obtained == true %>
+		<td><%= image_tag("tick.png") %></td>
+	  <% end %>
+	  <% if artist.obtained == false %>
+	  	<td><%= image_tag("cross.png")%></td>
+	  <% end %>
       <% if artist.reference.blank? == true %>
         <td><%= artist.reference %></td> 
       <% else %>

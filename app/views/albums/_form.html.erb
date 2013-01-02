@@ -186,7 +186,7 @@
   <%= fields_for(:album) do |f| %>   
     <div class="field">
       <%= f.label :obtained, "Album Obtained" %><br />
-      <%= f.check_box :obtained %>
+    	<%= f.select :obtained, [['No', 'f'], ['Yes', 't'], ["Ignored", "ignored"]], :default => "No" %>
     </div>
   	<div class="field">
       <%= f.label :note %><br />

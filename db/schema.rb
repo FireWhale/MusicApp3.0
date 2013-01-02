@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121005081419) do
+ActiveRecord::Schema.define(:version => 20121202020609) do
 
   create_table "albums", :force => true do |t|
     t.string   "name"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 20121005081419) do
     t.string   "catalognumber"
     t.string   "genre"
     t.string   "classification"
-    t.boolean  "obtained"
+    t.string   "obtained"
     t.string   "reference"
     t.string   "albumart"
     t.text     "note"

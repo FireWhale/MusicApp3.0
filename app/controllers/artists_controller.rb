@@ -52,7 +52,7 @@ class ArtistsController < ApplicationController
     #Code for Obtained Functionality
     @artist.obtained = true
     @albums.each do |each|
-      if each.obtained == false
+      if each.obtained == "f"
         @artist.obtained = false
       end
     end

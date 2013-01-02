@@ -56,14 +56,40 @@
 	<% @albums.each do |each| %>
 	<tr>
 		<td><%= link_to each.name, album_path(each) %></td>
-		<% if each.obtained == true%>
+		<% if each.obtained == "t" %>
 			<td><%= image_tag("tick.png") %></td>
-		<% else %>
+		<% end %>
+		<% if each.obtained == "f" %>
 			<td><%= image_tag("cross.png")%></td>
 		<% end %>
 	</tr>
 	<% end %>
 </table><hr>
+
+<% if @instances.empty? == false %>
+	<b>Child Albums</b>
+	<table>
+	<% @instances.each do |each| %>
+		<tr>
+			<% @instance = Source.find_by_id(each.instance_id) %>
+			<% @instancealbums = @instance.albums %>	
+			<td><%= @instance.name %></td>
+			<% @instancealbums.each do |each| %>
+				<tr>
+					<td><DD><%= link_to each.name, album_path(each) %></td>
+					<% if each.obtained == "t" %>
+						<td><%= image_tag("tick.png") %></td>
+					<% end %>
+					<% if each.obtained == "f" %>
+						<td><%= image_tag("cross.png")%></td>
+					<% end %>
+				</tr>
+			<% end %>
+		</tr>
+	<% end %>
+	</table><hr>
+<% end %>
+
 		
 <%= link_to_function 'Add an Album?', '$("#new_album").toggle();' %><br/>
 <% @albumformdisplay = "none" %>

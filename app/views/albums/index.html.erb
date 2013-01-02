@@ -14,7 +14,7 @@
 </header>
 
 <h1>Album List (Sorted By <%= @sorttitle %>) (Filter: <%= params[:filter] %>)(<%= @sorted.count %>)</h1>
-<% provide(:title, 'Album List') %>
+<% provide(:title, 'Albums') %>
 
 <table id="AlbumTable">
   <tr>
@@ -30,7 +30,7 @@
     <% @sources = album.sources %>
     <% @publisher = album.publisher %>
     <tr>
-	  <% if album.obtained == true%>
+	  <% if album.obtained == "t" %>
 		  <td><%= image_tag("tick.png") %></td>
       <% else %>
 		  <td><%= image_tag("cross.png")%></td>
